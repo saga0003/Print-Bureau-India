@@ -29,6 +29,24 @@ function pbi_submit_lead(): void {
     foreach($allowed as $field){ $data[$field]=sanitize_textarea_field(wp_unslash($_POST[$field] ?? '')); }
     $data['submitted_at']=current_time('mysql');
 
+    if (!empty($_FILES['artwork']['name'])) {
+        $max = 15 * 1024 * 1024;
+        $allowed_ext = ['pdf','jpg','jpeg','png','webp'];
+        $original = sanitize_file_name(wp_unslash($_FILES['artwork']['name']));
+        $ext = strtolower(pathinfo($original, PATHINFO_EXTENSION));
+        if ((int)($_FILES['artwork']['size'] ?? 0) <= $max && in_array($ext, $allowed_ext, true)) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+            require_once ABSPATH . 'wp-admin/includes/media.php';
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+            $attachment_id = media_handle_upload('artwork', 0);
+            if (!is_wp_error($attachment_id)) {
+                $data['artwork_attachment_id'] = (string)$attachment_id;
+                $data['artwork_url'] = (string)wp_get_attachment_url($attachment_id);
+                $data['artwork_name'] = $original;
+            }
+        }
+    }
+
     $lead_id=wp_insert_post(['post_type'=>'pbi_lead','post_status'=>'publish','post_title'=>trim(($data['lead_type'] ?: 'Website lead').' — '.$name)]);
     if (!is_wp_error($lead_id)) foreach($data as $k=>$v) update_post_meta($lead_id,'_pbi_'.$k,$v);
 
