@@ -1,0 +1,10 @@
+<?php get_header(); ?>
+<section class="pbi-contact-hero"><div class="pbi-wrap"><div class="pbi-kicker">Insights</div><h1 class="pbi-title">Ideas that make print work harder<span class="pbi-dot">.</span></h1><p class="pbi-sub">Practical guidance on design, materials, packaging and better print decisions.</p></div></section>
+<section class="pbi-section"><div class="pbi-wrap pbi-blog-layout">
+<aside class="pbi-filter"><h3>Explore</h3><a class="is-active" href="<?php echo esc_url(get_permalink((int)get_option('page_for_posts'))); ?>">All insights</a><?php foreach(get_categories(['number'=>6]) as $cat): ?><a href="<?php echo esc_url(get_category_link($cat)); ?>"><?php echo esc_html($cat->name); ?></a><?php endforeach; ?></aside>
+<div>
+<?php $featured=new WP_Query(['post_type'=>'post','posts_per_page'=>1]); if($featured->have_posts()):$featured->the_post(); ?><a class="pbi-featured-post" href="<?php the_permalink(); ?>"><div class="pbi-featured-post__copy"><div class="pbi-kicker">Featured insight</div><h2><?php the_title(); ?></h2><p class="pbi-sub"><?php echo esc_html(get_the_excerpt()); ?></p><span class="pbi-link">Read article ↗</span></div><div class="pbi-featured-post__image"><?php if(has_post_thumbnail())the_post_thumbnail('pbi-hero'); ?></div></a><?php wp_reset_postdata(); endif; ?>
+<div class="pbi-post-grid"><?php if(have_posts()):while(have_posts()):the_post(); ?><a class="pbi-post-card" href="<?php the_permalink(); ?>"><div class="pbi-post-card__img"><?php if(has_post_thumbnail())the_post_thumbnail('pbi-card',['loading'=>'lazy']); ?></div><div class="pbi-post-card__body"><div class="pbi-kicker"><?php $cats=get_the_category(); echo esc_html($cats[0]->name ?? 'Print guide'); ?></div><h3><?php the_title(); ?></h3><div class="pbi-meta"><?php echo esc_html(get_the_date()); ?> · <?php echo esc_html(max(2,(int)ceil(str_word_count(wp_strip_all_tags(get_the_content())))/220)); ?> min read</div></div></a><?php endwhile;endif; ?></div>
+<?php the_posts_pagination(); ?>
+</div></div></section>
+<?php get_template_part('template-parts/cta'); get_footer(); ?>

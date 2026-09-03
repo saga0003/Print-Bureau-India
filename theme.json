@@ -1,0 +1,10 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "layout": {"contentSize":"860px","wideSize":"1240px"},
+    "color": {"palette":[{"slug":"navy","name":"Print Bureau Navy","color":"#061525"},{"slug":"teal","name":"Print Bureau Teal","color":"#19b7a6"},{"slug":"gold","name":"Premium Gold","color":"#d8b766"},{"slug":"paper","name":"Paper","color":"#f7f8f7"}]},
+    "typography": {"fluid":true,"fontFamilies":[{"fontFamily":"Inter, ui-sans-serif, system-ui, sans-serif","slug":"system","name":"System Sans"}]}
+  },
+  "styles": {"typography":{"fontFamily":"var(--wp--preset--font-family--system)"},"elements":{"button":{"border":{"radius":"14px"}}}}
+}

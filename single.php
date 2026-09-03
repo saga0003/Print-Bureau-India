@@ -1,0 +1,3 @@
+<?php get_header(); the_post(); ?>
+<article class="pbi-article"><div class="pbi-kicker"><?php $cats=get_the_category(); echo esc_html($cats[0]->name ?? 'Print insights'); ?></div><h1><?php the_title(); ?><span class="pbi-dot">.</span></h1><div class="pbi-meta"><?php echo esc_html(get_the_date()); ?> · Print Bureau India</div><?php if(has_post_thumbnail()): ?><div style="margin:28px 0;border-radius:24px;overflow:hidden"><?php the_post_thumbnail('pbi-hero'); ?></div><?php endif; ?><div class="pbi-article__content"><?php the_content(); ?></div></article>
+<?php get_template_part('template-parts/cta'); get_footer(); ?>
