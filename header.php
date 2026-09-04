@@ -1,6 +1,8 @@
-<?php if (!defined('ABSPATH')) { exit; } ?>
+<?php if (!defined('ABSPATH')) { exit; }
+$default_theme = get_theme_mod('pbi_default_theme','dark');
+?>
 <!doctype html>
-<html <?php language_attributes(); ?> data-theme="<?php echo esc_attr(get_theme_mod('pbi_default_theme','dark')); ?>">
+<html <?php language_attributes(); ?> data-theme="<?php echo esc_attr($default_theme); ?>">
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,7 +13,7 @@
 <header class="pbi-header">
   <div class="pbi-wrap pbi-header__inner">
     <a class="pbi-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="Print Bureau India home">
-      <img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('light')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('dark')); ?>" src="<?php echo esc_url(pbi_logo_url('light')); ?>" alt="Print Bureau India">
+      <img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('dark')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('light')); ?>" src="<?php echo esc_url(pbi_logo_url($default_theme)); ?>" alt="Print Bureau India">
       <span class="pbi-brand__text">Print Bureau India</span>
     </a>
     <?php
