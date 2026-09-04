@@ -60,9 +60,6 @@ add_action(PBI_SYNC_CRON, function() {
     }
 });
 
-/**
- * Get the latest commit SHA for the configured branch.
- */
 function pbi_github_latest_sha() {
     $url = 'https://api.github.com/repos/' . PBI_GITHUB_REPO . '/commits/' . rawurlencode(PBI_GITHUB_BRANCH);
     $response = wp_remote_get($url, array(
@@ -73,9 +70,7 @@ function pbi_github_latest_sha() {
         ),
     ));
 
-    if (is_wp_error($response)) {
-        return $response;
-    }
+    if (is_wp_error($response)) return $response;
 
     $code = (int) wp_remote_retrieve_response_code($response);
     if ($code !== 200) {
@@ -90,9 +85,6 @@ function pbi_github_latest_sha() {
     return sanitize_text_field($body['sha']);
 }
 
-/**
- * Locate the repository root after GitHub ZIP extraction.
- */
 function pbi_github_sync_find_source($temp_dir) {
     $candidates = glob(trailingslashit($temp_dir) . '*', GLOB_ONLYDIR);
     if (!$candidates) {
@@ -111,10 +103,6 @@ function pbi_github_sync_find_source($temp_dir) {
     return new WP_Error('pbi_sync_validate', 'The GitHub archive did not contain a valid Print Bureau Premium theme.');
 }
 
-/**
- * Download main, validate it, create a local safety backup and copy it over
- * the currently installed theme directory.
- */
 function pbi_github_sync_run($force = false) {
     if (get_transient('pbi_github_sync_lock')) {
         return new WP_Error('pbi_sync_locked', 'A Print Bureau sync is already running.');
@@ -186,7 +174,6 @@ function pbi_github_sync_run($force = false) {
     $destination = get_stylesheet_directory();
     $backup = trailingslashit(WP_CONTENT_DIR) . 'upgrade/pbi-premium-last-backup';
 
-    // Keep one local rollback copy of the previously installed code.
     if ($wp_filesystem->exists($backup)) {
         $wp_filesystem->delete($backup, true);
     }
@@ -202,13 +189,21 @@ function pbi_github_sync_run($force = false) {
 
     $copy_result = copy_dir($source, $destination);
     if (is_wp_error($copy_result)) {
-        // Best-effort restore if a copy operation fails mid-update.
         copy_dir($backup, $destination);
         $wp_filesystem->delete($temp_dir, true);
         $error = new WP_Error('pbi_sync_copy', 'GitHub sync failed and the previous theme files were restored: ' . $copy_result->get_error_message());
         pbi_github_sync_save(array('last_error' => $error->get_error_message()));
         delete_transient('pbi_github_sync_lock');
         return $error;
+    }
+
+    /*
+     * GitHub stores internal SEO notes and planning under /research, but those
+     * files must never be deployed into the public WordPress theme directory.
+     */
+    $research_dir = trailingslashit($destination) . 'research';
+    if ($wp_filesystem->exists($research_dir)) {
+        $wp_filesystem->delete($research_dir, true);
     }
 
     $wp_filesystem->delete($temp_dir, true);
@@ -224,9 +219,6 @@ function pbi_github_sync_run($force = false) {
     return array('status' => 'updated', 'sha' => $sha);
 }
 
-/**
- * Admin screen: Appearance -> GitHub Sync.
- */
 add_action('admin_menu', function() {
     add_theme_page(
         __('Print Bureau GitHub Sync', 'print-bureau-premium'),
@@ -249,7 +241,7 @@ function pbi_github_sync_admin_page() {
     ?>
     <div class="wrap">
         <h1><?php esc_html_e('Print Bureau GitHub Sync', 'print-bureau-premium'); ?></h1>
-        <p>Once this theme is installed, updates pushed to <strong><?php echo esc_html(PBI_GITHUB_REPO); ?></strong> on the <strong><?php echo esc_html(PBI_GITHUB_BRANCH); ?></strong> branch can be pulled into WordPress automatically. No Hostinger Git feature and no repeated ZIP uploads are required.</p>
+        <p>Updates pushed to <strong><?php echo esc_html(PBI_GITHUB_REPO); ?></strong> on <strong><?php echo esc_html(PBI_GITHUB_BRANCH); ?></strong> can be pulled into WordPress automatically. Internal files under <code>/research</code> stay in GitHub and are removed from the public WordPress theme after every sync.</p>
 
         <?php if ($notice === 'updated') : ?>
             <div class="notice notice-success is-dismissible"><p>Print Bureau was synced successfully from GitHub.</p></div>
@@ -285,7 +277,7 @@ function pbi_github_sync_admin_page() {
             </form>
         </div>
 
-        <p style="max-width:900px;margin-top:18px;color:#646970"><strong>How it works:</strong> WordPress checks GitHub approximately every 10 minutes using WP-Cron. A check runs when WordPress receives traffic, so a very low-traffic preview site may not update until it receives a visit. The “Sync from GitHub Now” button is immediate. Media, posts, leads and WordPress database content are not deleted by theme code sync.</p>
+        <p style="max-width:900px;margin-top:18px;color:#646970"><strong>How it works:</strong> WordPress checks GitHub approximately every 10 minutes using WP-Cron. The “Sync from GitHub Now” button is immediate. Theme/code/image updates are backed up first; managed website content is applied separately and customer leads, users and uploaded artwork are not deleted.</p>
     </div>
     <?php
 }
