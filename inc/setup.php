@@ -29,31 +29,20 @@ function pbi_enqueue_assets(): void {
 
     $premium_css = get_template_directory() . '/assets/premium-v2.css';
     if (is_file($premium_css)) {
-        wp_enqueue_style(
-            'pbi-premium-v2',
-            get_template_directory_uri() . '/assets/premium-v2.css',
-            ['pbi-style'],
-            pbi_asset_version('assets/premium-v2.css', $version)
-        );
+        wp_enqueue_style('pbi-premium-v2', get_template_directory_uri() . '/assets/premium-v2.css', ['pbi-style'], pbi_asset_version('assets/premium-v2.css', $version));
     }
 
     $refinements_css = get_template_directory() . '/assets/refinements.css';
     if (is_file($refinements_css)) {
-        wp_enqueue_style(
-            'pbi-refinements',
-            get_template_directory_uri() . '/assets/refinements.css',
-            ['pbi-style','pbi-premium-v2'],
-            pbi_asset_version('assets/refinements.css', $version)
-        );
+        wp_enqueue_style('pbi-refinements', get_template_directory_uri() . '/assets/refinements.css', ['pbi-style','pbi-premium-v2'], pbi_asset_version('assets/refinements.css', $version));
     }
 
-    wp_enqueue_script(
-        'pbi-theme',
-        get_template_directory_uri() . '/assets/theme.js',
-        [],
-        pbi_asset_version('assets/theme.js', $version),
-        true
-    );
+    $reference_css = get_template_directory() . '/assets/reference-ui-v3.css';
+    if (is_file($reference_css)) {
+        wp_enqueue_style('pbi-reference-ui-v3', get_template_directory_uri() . '/assets/reference-ui-v3.css', ['pbi-style','pbi-premium-v2','pbi-refinements'], pbi_asset_version('assets/reference-ui-v3.css', $version));
+    }
+
+    wp_enqueue_script('pbi-theme', get_template_directory_uri() . '/assets/theme.js', [], pbi_asset_version('assets/theme.js', $version), true);
     wp_localize_script('pbi-theme', 'PBI_THEME', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'quoteUrl' => home_url('/quote/'),
@@ -82,11 +71,7 @@ function pbi_logo_url(string $surface = 'dark'): string {
         return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/png/Print%20Bureau%20Transparent%20BG/' . rawurlencode($filename));
     }
 
-    // Emergency fallback only if the transparent repository export is missing.
-    $custom = $surface === 'dark'
-        ? get_theme_mod('pbi_logo_dark')
-        : get_theme_mod('pbi_logo_light');
-
+    $custom = $surface === 'dark' ? get_theme_mod('pbi_logo_dark') : get_theme_mod('pbi_logo_light');
     return $custom ? esc_url($custom) : '';
 }
 
@@ -105,11 +90,11 @@ function pbi_icon(string $name): string {
 
 function pbi_primary_menu_fallback(): void {
     $items = [
-        'Products' => get_post_type_archive_link('pbi_product') ?: home_url('/products/'),
-        'Work' => home_url('/#work'),
-        'Blog' => get_permalink((int) get_option('page_for_posts')) ?: home_url('/blog/'),
-        'About' => home_url('/#about'),
-        'Contact' => home_url('/contact/'),
+        'Products'  => get_post_type_archive_link('pbi_product') ?: home_url('/products/'),
+        'Solutions' => home_url('/#solutions'),
+        'Work'      => home_url('/#work'),
+        'About'     => home_url('/#about'),
+        'Resources' => get_permalink((int) get_option('page_for_posts')) ?: home_url('/blog/'),
     ];
     echo '<div class="pbi-nav">';
     foreach ($items as $label => $url) {
