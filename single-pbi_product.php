@@ -18,5 +18,8 @@ $pbi_product_image=pbi_product_image_url(get_the_ID(),'pbi-hero');
 <section class="pbi-section"><div class="pbi-wrap"><div class="pbi-heading-row"><h2>Options</h2></div><div class="pbi-card-row">
 <?php foreach(array_slice(array_filter(array_map('trim',explode(',',$finish))),0,4) as $option): ?><div class="pbi-option-card"><div class="pbi-option-card__img"></div><div class="pbi-option-card__body"><strong><?php echo esc_html($option); ?></strong><small>Premium finish</small></div></div><?php endforeach; ?>
 </div></div></section>
+<?php if (trim((string) get_the_content())): ?>
+<section class="pbi-section--tight"><div class="pbi-wrap"><div class="pbi-product-copy"><h2>About <?php the_title(); ?></h2><?php the_content(); ?></div></div></section>
+<?php endif; ?>
 <section class="pbi-section--tight"><div class="pbi-wrap"><div class="pbi-heading-row"><h2>FAQs</h2></div><div class="pbi-faq"><details><summary>What file formats do you accept?</summary><p>PDF is preferred. We can also review AI, PSD, PNG and JPG files.</p></details><details><summary>Can you help with design?</summary><p>Yes. Share your requirement and we can help prepare a print-ready design.</p></details><details><summary>What is the turnaround time?</summary><p><?php echo esc_html($turnaround); ?> for many standard jobs; complex finishes may take longer.</p></details></div></div></section>
 <?php get_template_part('template-parts/cta'); get_footer(); ?>
