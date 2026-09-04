@@ -6,7 +6,22 @@ function pbi_customize_register(WP_Customize_Manager $wp_customize): void {
     $wp_customize->add_setting('pbi_default_theme', ['default'=>'dark','sanitize_callback'=>fn($v)=>in_array($v,['dark','light'],true)?$v:'dark']);
     $wp_customize->add_control('pbi_default_theme', ['label'=>'Default colour mode','section'=>'pbi_brand','type'=>'select','choices'=>['dark'=>'Dark','light'=>'Light']]);
 
-    foreach (['pbi_logo_dark'=>'Logo for dark backgrounds','pbi_logo_light'=>'Logo for light backgrounds','pbi_hero_image'=>'Homepage hero image'] as $id=>$label) {
+    $wp_customize->add_setting('pbi_prefer_github_assets', [
+        'default' => true,
+        'sanitize_callback' => static fn($value) => (bool) $value,
+    ]);
+    $wp_customize->add_control('pbi_prefer_github_assets', [
+        'label' => 'Prefer GitHub-managed website images',
+        'description' => 'When enabled, files placed in assets/images/ in GitHub automatically override matching homepage/product images after sync. WordPress Media Library remains the fallback.',
+        'section' => 'pbi_brand',
+        'type' => 'checkbox',
+    ]);
+
+    foreach ([
+        'pbi_logo_dark' => 'Logo shown on DARK background (use white-text logo)',
+        'pbi_logo_light' => 'Logo shown on LIGHT background (use dark-text logo)',
+        'pbi_hero_image' => 'Homepage hero image (WordPress fallback)',
+    ] as $id=>$label) {
         $wp_customize->add_setting($id, ['sanitize_callback'=>'esc_url_raw']);
         $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, $id, ['label'=>$label,'section'=>'pbi_brand']));
     }
