@@ -21,6 +21,17 @@ add_action('after_setup_theme', 'pbi_theme_setup');
 function pbi_enqueue_assets(): void {
     $version = wp_get_theme()->get('Version');
     wp_enqueue_style('pbi-style', get_stylesheet_uri(), [], $version);
+
+    $premium_css = get_template_directory() . '/assets/premium-v2.css';
+    if (is_file($premium_css)) {
+        wp_enqueue_style(
+            'pbi-premium-v2',
+            get_template_directory_uri() . '/assets/premium-v2.css',
+            ['pbi-style'],
+            (string) filemtime($premium_css)
+        );
+    }
+
     wp_enqueue_script('pbi-theme', get_template_directory_uri() . '/assets/theme.js', [], $version, true);
     wp_localize_script('pbi-theme', 'PBI_THEME', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -37,26 +48,29 @@ function pbi_body_classes(array $classes): array {
 add_filter('body_class', 'pbi_body_classes');
 
 /**
- * Return the logo intended for the requested page background.
+ * Return the official repository SVG for the requested page background.
+ * We deliberately prefer the approved GitHub logo assets over old Customizer
+ * uploads so an outdated square/bitmap logo cannot override the live header.
+ *
  * $surface = dark  -> white-text logo
  * $surface = light -> dark-text logo
  */
 function pbi_logo_url(string $surface = 'dark'): string {
-    $for_dark_surface = get_theme_mod('pbi_logo_dark');
-    $for_light_surface = get_theme_mod('pbi_logo_light');
+    $filename = $surface === 'dark'
+        ? 'Print Bureau Transparent White BG.svg'
+        : 'Print Bureau Transparent BG.svg';
 
-    if ($surface === 'dark' && $for_dark_surface) {
-        return esc_url($for_dark_surface);
+    $path = trailingslashit(get_template_directory()) . 'Logo/SVG/' . $filename;
+    if (is_file($path)) {
+        return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/SVG/' . rawurlencode($filename));
     }
-    if ($surface === 'light' && $for_light_surface) {
-        return esc_url($for_light_surface);
-    }
 
-    $fallback = $surface === 'dark'
-        ? get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20White%20BG.svg'
-        : get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20BG.svg';
+    // Emergency fallback only if the repository SVG is missing.
+    $custom = $surface === 'dark'
+        ? get_theme_mod('pbi_logo_dark')
+        : get_theme_mod('pbi_logo_light');
 
-    return esc_url($fallback);
+    return $custom ? esc_url($custom) : '';
 }
 
 function pbi_contact(string $key, string $default = ''): string {
