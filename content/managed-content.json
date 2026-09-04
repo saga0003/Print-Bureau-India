@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "theme_mods": {
+    "pbi_hero_title": "Print that Creates Impact.",
+    "pbi_hero_subtitle": "Premium printing. Thoughtful details. Lasting impressions.",
+    "pbi_prefer_github_assets": true
+  },
+  "pages": [
+    {
+      "slug": "home",
+      "title": "Print Bureau India",
+      "seo_title": "Printing Services in Chikmagalur | Print Bureau India",
+      "meta_description": "Premium printing services in Chikmagalur for business cards, brochures, packaging, books, labels, signage, stationery and institutional printing."
+    },
+    {
+      "slug": "contact",
+      "title": "Contact Print Bureau India",
+      "seo_title": "Contact Print Bureau India | Printing in Chikmagalur",
+      "meta_description": "Contact Print Bureau India in Chikmagalur for custom printing, business stationery, brochures, packaging, labels, books, signage and institutional print requirements."
+    },
+    {
+      "slug": "quote",
+      "title": "Get a Printing Quote",
+      "seo_title": "Get a Printing Quote in Chikmagalur | Print Bureau India",
+      "meta_description": "Request a printing quote from Print Bureau India for business cards, brochures, packaging, labels, books, stationery, invitations, signage and more."
+    },
+    {
+      "slug": "blog",
+      "title": "Print Insights",
+      "seo_title": "Printing Guides & Ideas | Print Bureau India",
+      "meta_description": "Practical printing guides, material choices, finishing ideas and print planning tips from Print Bureau India."
+    }
+  ],
+  "products": [
+    {
+      "slug": "business-cards",
+      "title": "Business Cards",
+      "menu_order": 10,
+      "excerpt": "Premium business card and visiting card printing in Chikmagalur with clean finishes and custom options.",
+      "content": "<p>Make the first impression count with professionally printed business cards and visiting cards. Choose from practical everyday stocks or premium finishes depending on how you want your brand to feel.</p><p>We help businesses, professionals, institutions and startups in Chikmagalur with print-ready setup, custom quantities and finishing options for a polished final result.</p>",
+      "seo_title": "Business Card & Visiting Card Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Business card and visiting card printing in Chikmagalur with premium paper, custom sizes, lamination and finishing options from Print Bureau India.",
+      "sizes": "Standard, Square, Custom",
+      "paper": "Premium Matte, Premium Gloss, Textured, Custom",
+      "finish": "Matte Lamination, Gloss Lamination, Spot UV, Foil",
+      "turnaround": "2–4 business days"
+    },
+    {
+      "slug": "brochures",
+      "title": "Brochures",
+      "menu_order": 20,
+      "excerpt": "Brochure, flyer and pamphlet printing in Chikmagalur for businesses, institutions, events and campaigns.",
+      "content": "<p>Brochures should explain your offer quickly and look credible in the customer’s hand. We print brochures, flyers and pamphlets in multiple sizes, fold styles and paper options for marketing, admissions, events and corporate communication.</p><p>Share your artwork or requirement and we can help prepare the right print specification before production.</p>",
+      "seo_title": "Brochure, Flyer & Pamphlet Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Brochure, flyer and pamphlet printing in Chikmagalur with custom sizes, folds, paper stocks and premium finishes for businesses and institutions.",
+      "sizes": "A4, A5, DL, Custom",
+      "paper": "130 GSM Gloss, 170 GSM Matte, 250 GSM Premium, Custom",
+      "finish": "Bi-fold, Tri-fold, Matte Lamination, Gloss Lamination",
+      "turnaround": "3–5 business days"
+    },
+    {
+      "slug": "packaging",
+      "title": "Packaging",
+      "menu_order": 30,
+      "excerpt": "Custom packaging printing for products, retail, gifting and branded presentation in Chikmagalur.",
+      "content": "<p>Good packaging protects the product and strengthens the brand before the customer even opens it. We support custom printed boxes, sleeves, inserts, labels and branded packaging components for retail, gifting and institutional requirements.</p><p>Material, structure, quantity and finish are planned around the product so the final pack is practical as well as premium.</p>",
+      "seo_title": "Custom Packaging Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Custom packaging printing in Chikmagalur for boxes, sleeves, inserts, labels and branded product packaging with premium finishing options.",
+      "sizes": "Custom to Product",
+      "paper": "Paperboard, Kraft, Premium Board, Custom",
+      "finish": "Matte Lamination, Foil, Spot UV, Embossing",
+      "turnaround": "5–10 business days"
+    },
+    {
+      "slug": "stationery",
+      "title": "Stationery",
+      "menu_order": 40,
+      "excerpt": "Corporate stationery printing in Chikmagalur including letterheads, envelopes, folders, pads and coordinated brand materials.",
+      "content": "<p>Consistent stationery makes everyday communication feel more professional. We print letterheads, envelopes, notepads, folders and coordinated business stationery for offices, institutions and growing brands.</p><p>We can match your existing brand system or help organise a clean print-ready set across multiple stationery items.</p>",
+      "seo_title": "Corporate Stationery Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Corporate stationery printing in Chikmagalur for letterheads, envelopes, folders, notepads and coordinated branded office materials.",
+      "sizes": "A4, A5, DL, Custom",
+      "paper": "Bond, Maplitho, Premium Uncoated, Custom",
+      "finish": "Standard, Textured, Foil, Custom",
+      "turnaround": "3–5 business days"
+    },
+    {
+      "slug": "books-catalogs",
+      "title": "Books & Catalogs",
+      "menu_order": 50,
+      "excerpt": "Book, catalog, report and booklet printing in Chikmagalur with multiple binding and finishing options.",
+      "content": "<p>From short booklets to detailed catalogs and institutional reports, we help plan the right paper, cover, binding and finish for the way the document will be used.</p><p>Suitable for product catalogs, annual reports, training material, manuals, books, magazines, prospectuses and other multi-page print requirements.</p>",
+      "seo_title": "Book, Catalog & Booklet Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Book, catalog, booklet and report printing in Chikmagalur with custom paper, cover, binding and finishing options from Print Bureau India.",
+      "sizes": "A4, A5, Square, Custom",
+      "paper": "Maplitho, Art Paper, Premium Uncoated, Custom",
+      "finish": "Perfect Binding, Wiro, Saddle Stitch, Hardbound",
+      "turnaround": "5–10 business days"
+    },
+    {
+      "slug": "stickers-labels",
+      "title": "Stickers & Labels",
+      "menu_order": 60,
+      "excerpt": "Custom sticker and product label printing in Chikmagalur for packaging, branding, events and promotions.",
+      "content": "<p>Custom stickers and labels can carry branding, product information, pricing, instructions or campaign messaging in a compact format. We support multiple shapes, sizes and materials based on the surface and application.</p><p>Ideal for product packaging, jars, bottles, boxes, events, retail and promotional use.</p>",
+      "seo_title": "Sticker & Product Label Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Sticker and product label printing in Chikmagalur with custom shapes, sizes and materials for packaging, retail, branding and events.",
+      "sizes": "Custom Shape, Round, Square, Rectangular",
+      "paper": "Paper Label, Vinyl, Transparent, Custom",
+      "finish": "Matte, Gloss, Die-cut, Premium Finish",
+      "turnaround": "3–5 business days"
+    },
+    {
+      "slug": "banners-signage",
+      "title": "Banners & Signage",
+      "menu_order": 70,
+      "excerpt": "Banner, poster, standee and large-format printing in Chikmagalur for events, retail, institutions and outdoor visibility.",
+      "content": "<p>Large-format print needs to be readable from the right distance and durable enough for its location. We support banners, posters, standees, display graphics and signage for events, retail spaces, institutions and campaigns.</p><p>Share the installation size and viewing requirement and we will help choose an appropriate print format.</p>",
+      "seo_title": "Banner, Poster & Large Format Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Banner, poster, standee and large-format printing in Chikmagalur for events, retail, institutions, campaigns and branded displays.",
+      "sizes": "Custom",
+      "paper": "Poster Paper, Vinyl, Flex, Display Media",
+      "finish": "Matte, Gloss, Eyelets, Mounting",
+      "turnaround": "2–5 business days"
+    },
+    {
+      "slug": "institutional-printing",
+      "title": "Institutional Printing",
+      "menu_order": 80,
+      "excerpt": "School, college and institutional printing in Chikmagalur for notebooks, certificates, ID materials, prospectuses and recurring print needs.",
+      "content": "<p>Institutions often need many different print items delivered with consistent branding and dependable repeat quality. We support schools, colleges, organisations and offices with notebooks, certificates, ID materials, prospectuses, reports, forms and recurring print requirements.</p><p>For repeat jobs, specifications can be standardised to make reordering simpler and more consistent.</p>",
+      "seo_title": "School & Institutional Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Institutional printing in Chikmagalur for schools, colleges and organisations including notebooks, certificates, ID materials, prospectuses and forms.",
+      "sizes": "A4, A5, Custom",
+      "paper": "Maplitho, Art Paper, Card Stock, Custom",
+      "finish": "Binding, Lamination, Foil, Custom",
+      "turnaround": "Based on quantity"
+    },
+    {
+      "slug": "invitations",
+      "title": "Invitations",
+      "menu_order": 90,
+      "excerpt": "Invitation card printing in Chikmagalur for weddings, events, corporate functions and special occasions.",
+      "content": "<p>Invitations set the tone before the event begins. We print invitation cards for weddings, celebrations, corporate functions, launches and institutional events with custom paper, envelopes and premium finishing options.</p><p>Choose a clean standard format or build a more distinctive invitation suite around your artwork and event style.</p>",
+      "seo_title": "Invitation Card Printing in Chikmagalur | Print Bureau India",
+      "meta_description": "Invitation card printing in Chikmagalur for weddings, events and corporate functions with custom papers, envelopes and premium finishes.",
+      "sizes": "A5, Square, Custom",
+      "paper": "Premium Matte, Textured, Metallic, Custom",
+      "finish": "Foil, Embossing, Matte Lamination, Custom",
+      "turnaround": "4–7 business days"
+    }
+  ]
+}
