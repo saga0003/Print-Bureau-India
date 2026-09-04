@@ -5,6 +5,21 @@ function pbi_has_seo_plugin(): bool {
     return defined('WPSEO_VERSION') || defined('RANK_MATH_VERSION') || defined('SEOPRESS_VERSION') || class_exists('All_in_One_SEO_Pack');
 }
 
+function pbi_is_production_domain(): bool {
+    $host = strtolower((string) wp_parse_url(home_url('/'), PHP_URL_HOST));
+    return in_array($host, ['printbureauindia.com','www.printbureauindia.com'], true);
+}
+
+/* Preview/staging copies must never compete with the canonical live domain. */
+add_filter('wp_robots', function(array $robots): array {
+    if (!pbi_is_production_domain()) {
+        $robots['noindex'] = true;
+        $robots['nofollow'] = true;
+        $robots['noarchive'] = true;
+    }
+    return $robots;
+});
+
 function pbi_custom_seo_title(int $post_id): string {
     return trim((string) get_post_meta($post_id, '_pbi_seo_title', true));
 }
@@ -33,6 +48,14 @@ function pbi_document_title(string $title): string {
 }
 add_filter('pre_get_document_title', 'pbi_document_title', 20);
 
+function pbi_canonical_url(): string {
+    if (is_singular()) return (string) get_permalink();
+    if (is_post_type_archive('pbi_product')) return (string) get_post_type_archive_link('pbi_product');
+    if (is_home()) return (string) get_permalink((int) get_option('page_for_posts'));
+    if (is_front_page()) return (string) home_url('/');
+    return '';
+}
+
 function pbi_head_meta(): void {
     if (!pbi_has_seo_plugin()) {
         printf("\n<meta name=\"description\" content=\"%s\">\n", esc_attr(pbi_meta_description()));
@@ -41,6 +64,11 @@ function pbi_head_meta(): void {
         printf("<meta property=\"og:url\" content=\"%s\">\n", esc_url(home_url(add_query_arg([], $GLOBALS['wp']->request ?? ''))));
         printf("<meta property=\"og:type\" content=\"%s\">\n", is_singular('post') ? 'article' : 'website');
         if (is_singular() && has_post_thumbnail()) printf("<meta property=\"og:image\" content=\"%s\">\n", esc_url(get_the_post_thumbnail_url(null,'full')));
+
+        $canonical = pbi_canonical_url();
+        if ($canonical && pbi_is_production_domain()) {
+            printf("<link rel=\"canonical\" href=\"%s\">\n", esc_url($canonical));
+        }
     }
 
     $org=[
