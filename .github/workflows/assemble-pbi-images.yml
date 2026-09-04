@@ -1,0 +1,53 @@
+name: Assemble Print Bureau Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/image-pack/**'
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Assemble optimized website images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/images
+
+          if compgen -G "assets/image-pack/v2/part-*.txt" > /dev/null; then
+            cat $(find assets/image-pack/v2 -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
+            base64 --decode /tmp/pbi-assets.b64 > /tmp/pbi-assets-pack.zip
+            unzip -o /tmp/pbi-assets-pack.zip -d assets/images
+          elif [ -f "assets/image-pack/pbi-assets-pack.zip" ]; then
+            unzip -o assets/image-pack/pbi-assets-pack.zip -d assets/images
+          elif compgen -G "assets/image-pack/chunks/part-*.txt" > /dev/null; then
+            cat $(find assets/image-pack/chunks -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
+            base64 --decode /tmp/pbi-assets.b64 > /tmp/pbi-assets-pack.zip
+            unzip -o /tmp/pbi-assets-pack.zip -d assets/images
+          else
+            echo "No image pack found."
+            exit 0
+          fi
+
+          rm -rf assets/image-pack
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A assets/images assets/image-pack
+
+          if git diff --cached --quiet; then
+            echo "No image changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Add optimized premium Print Bureau website images"
+          git push
