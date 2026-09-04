@@ -10,7 +10,7 @@
         <a class="pbi-btn pbi-btn--outline" href="#work">Explore Work ↗</a>
       </div>
     </div>
-    <?php $hero = get_theme_mod('pbi_hero_image'); ?>
+    <?php $hero = pbi_hero_image_url(); ?>
     <?php if ($hero): ?>
       <div style="border-radius:32px;overflow:hidden;box-shadow:var(--pbi-shadow)"><img src="<?php echo esc_url($hero); ?>" alt="Premium Print Bureau India printed products" fetchpriority="high" style="width:100%;height:520px;object-fit:cover"></div>
     <?php else: ?>
@@ -25,9 +25,9 @@
   <div class="pbi-wrap">
     <div class="pbi-heading-row"><h2>What do you need printed?</h2><a class="pbi-link" href="<?php echo esc_url(get_post_type_archive_link('pbi_product') ?: home_url('/products/')); ?>">View all ↗</a></div>
     <div class="pbi-category-grid">
-      <?php $products=pbi_get_products(8); if($products->have_posts()): while($products->have_posts()):$products->the_post(); ?>
+      <?php $products=pbi_get_products(8); if($products->have_posts()): while($products->have_posts()):$products->the_post(); $pbi_card_image=pbi_product_image_url(get_the_ID(),'pbi-card'); ?>
         <a class="pbi-category-card" href="<?php the_permalink(); ?>">
-          <div class="pbi-category-card__visual <?php echo has_post_thumbnail()?'':'pbi-category-card__visual--fallback'; ?>"><?php if(has_post_thumbnail()) the_post_thumbnail('pbi-card',['loading'=>'lazy']); ?></div>
+          <div class="pbi-category-card__visual <?php echo $pbi_card_image?'':'pbi-category-card__visual--fallback'; ?>"><?php if($pbi_card_image): ?><img src="<?php echo esc_url($pbi_card_image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" loading="lazy"><?php endif; ?></div>
           <div class="pbi-category-card__body"><strong><?php the_title(); ?></strong><span class="pbi-arrow">↗</span></div>
         </a>
       <?php endwhile; wp_reset_postdata(); else: ?>
