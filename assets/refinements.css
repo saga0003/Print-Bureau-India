@@ -1,23 +1,7 @@
-/* Print Bureau visual refinements loaded after the base stylesheet. */
+/* Print Bureau visual refinements loaded after the base and premium styles. */
 
-/* Header: use the full transparent logo artwork rather than showing the large square canvas. */
-.pbi-brand{
-  position:relative;
-  width:190px;
-  min-width:190px;
-  height:56px;
-  overflow:hidden;
-  gap:0!important;
-}
-.pbi-brand img[data-pbi-logo]{
-  width:180px!important;
-  height:180px!important;
-  max-width:none!important;
-  flex:none;
-  object-fit:contain!important;
-  transform:translate(-11px,-62px);
-  background:transparent!important;
-}
+/* Keep the repository logo transparent; premium-v2.css owns the crop window. */
+.pbi-brand img[data-pbi-logo]{background:transparent!important}
 .pbi-brand__text{display:none!important}
 
 /* Give important conversion typography an explicit heavy weight on every browser. */
@@ -52,7 +36,7 @@
 .pbi-product-copy p:last-child{margin-bottom:0}
 
 @media (max-width:760px){
-  /* Android/Chrome can visually soften inherited font weights; force the hierarchy here. */
+  /* Android/Chrome can visually soften inherited font weights; force hierarchy with higher specificity. */
   html body .pbi-title{
     font-weight:900!important;
     letter-spacing:-.045em!important;
@@ -72,7 +56,5 @@
   html body .pbi-nav a{
     font-weight:800!important;
   }
-  .pbi-brand{width:145px!important;min-width:145px!important;height:54px!important}
-  .pbi-brand img[data-pbi-logo]{width:162px!important;height:162px!important;transform:translate(-12px,-55px)!important}
   .pbi-product-copy{padding:24px}
 }
