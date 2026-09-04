@@ -13,8 +13,10 @@ $default_theme = get_theme_mod('pbi_default_theme','dark');
 <header class="pbi-header">
   <div class="pbi-wrap pbi-header__inner">
     <a class="pbi-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="Print Bureau India home">
-      <img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('dark')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('light')); ?>" src="<?php echo esc_url(pbi_logo_url($default_theme)); ?>" alt="Print Bureau India">
-      <span class="pbi-brand__text">Print Bureau India</span>
+      <span class="pbi-brand__logo" aria-hidden="true">
+        <img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('dark')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('light')); ?>" src="<?php echo esc_url(pbi_logo_url($default_theme)); ?>" alt="">
+      </span>
+      <span class="screen-reader-text">Print Bureau India</span>
     </a>
     <?php
       if (has_nav_menu('primary')) {
