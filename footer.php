@@ -4,9 +4,9 @@
   <div class="pbi-wrap">
     <div class="pbi-footer__grid">
       <div>
-        <a class="pbi-brand" href="<?php echo esc_url(home_url('/')); ?>">
-          <img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('light')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('dark')); ?>" src="<?php echo esc_url(pbi_logo_url('light')); ?>" alt="Print Bureau India">
-          <span class="pbi-brand__text">Print Bureau India</span>
+        <a class="pbi-brand" href="<?php echo esc_url(home_url('/')); ?>" aria-label="Print Bureau India home">
+          <span class="pbi-brand__logo" aria-hidden="true"><img data-pbi-logo data-dark="<?php echo esc_attr(pbi_logo_url('dark')); ?>" data-light="<?php echo esc_attr(pbi_logo_url('light')); ?>" src="<?php echo esc_url(pbi_logo_url('dark')); ?>" alt=""></span>
+          <span class="screen-reader-text">Print Bureau India</span>
         </a>
         <p class="pbi-sub" style="font-size:.95rem;max-width:360px">Premium printing. Thoughtful details. Reliable delivery.</p>
       </div>
