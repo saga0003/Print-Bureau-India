@@ -51,7 +51,7 @@ function pbi_product_meta_box_html(WP_Post $post): void {
         $value = get_post_meta($post->ID, '_pbi_' . $key, true);
         printf('<tr><th><label for="pbi_%1$s">%2$s</label></th><td><input class="regular-text" id="pbi_%1$s" name="pbi_%1$s" value="%3$s" placeholder="%4$s"></td></tr>', esc_attr($key), esc_html($config[0]), esc_attr($value), esc_attr($config[1]));
     }
-    echo '</table><p><strong>Tip:</strong> Use the Featured Image as the product card and hero image. That makes image replacement easy from WordPress.</p>';
+    echo '</table><p><strong>Image priority:</strong> GitHub-managed product artwork is used first when enabled. Featured Image remains the safe WordPress fallback.</p>';
 }
 
 function pbi_save_product_specs(int $post_id): void {
@@ -63,6 +63,59 @@ function pbi_save_product_specs(int $post_id): void {
     }
 }
 add_action('save_post_pbi_product', 'pbi_save_product_specs');
+
+function pbi_managed_products(): array {
+    return [
+        'Business Cards' => 'Premium cards designed to make the first impression count.',
+        'Brochures' => 'Brochures that inform, impress and move customers to act.',
+        'Packaging' => 'Premium packaging for products, gifts and retail brands.',
+        'Stationery' => 'Letterheads, envelopes and coordinated business stationery.',
+        'Books & Catalogs' => 'Books, catalogs, reports and premium bound documents.',
+        'Invitations' => 'Premium invitations for weddings, events, launches and celebrations.',
+        'Stickers & Labels' => 'Custom labels and stickers for products, events and campaigns.',
+        'Banners & Signage' => 'High-impact large-format print and signage.',
+        'Institutional Printing' => 'Certificates, notebooks, ID materials and institutional print.',
+    ];
+}
+
+/**
+ * Keep the small core product catalogue present after GitHub theme updates.
+ * This is intentionally conservative: it creates missing products and controls
+ * menu order, but it does not overwrite user-edited product copy.
+ */
+function pbi_sync_managed_catalog(): void {
+    $catalog_version = '2026-09-04-v2';
+    if (get_option('pbi_catalog_version') === $catalog_version) return;
+
+    pbi_register_content_types();
+    $order = 0;
+    foreach (pbi_managed_products() as $title => $excerpt) {
+        $slug = sanitize_title($title);
+        $post = get_page_by_path($slug, OBJECT, 'pbi_product');
+
+        if (!$post) {
+            $post_id = wp_insert_post([
+                'post_type' => 'pbi_product',
+                'post_status' => 'publish',
+                'post_title' => $title,
+                'post_name' => $slug,
+                'post_excerpt' => $excerpt,
+                'post_content' => '',
+                'menu_order' => $order,
+            ]);
+            if (!is_wp_error($post_id)) $post = get_post($post_id);
+        }
+
+        if ($post instanceof WP_Post && (int) $post->menu_order !== $order) {
+            wp_update_post(['ID' => $post->ID, 'menu_order' => $order]);
+        }
+        $order++;
+    }
+
+    update_option('pbi_catalog_version', $catalog_version, false);
+    flush_rewrite_rules(false);
+}
+add_action('init', 'pbi_sync_managed_catalog', 30);
 
 function pbi_seed_site(): void {
     pbi_register_content_types();
@@ -84,25 +137,17 @@ function pbi_seed_site(): void {
     }
     if (!empty($created['blog']) && !is_wp_error($created['blog'])) update_option('page_for_posts', (int) $created['blog']);
 
-    $products = [
-        'Business Cards' => 'Premium cards designed to make the first impression count.',
-        'Brochures' => 'Brochures that inform, impress and move customers to act.',
-        'Packaging' => 'Premium packaging for products, gifts and retail brands.',
-        'Stationery' => 'Letterheads, envelopes and coordinated business stationery.',
-        'Books & Catalogs' => 'Books, catalogs, reports and premium bound documents.',
-        'Stickers & Labels' => 'Custom labels and stickers for products, events and campaigns.',
-        'Banners & Signage' => 'High-impact large-format print and signage.',
-        'Institutional Printing' => 'Certificates, notebooks, ID materials and institutional print.',
-    ];
-    foreach ($products as $title => $excerpt) {
-        $exists = get_posts(['post_type'=>'pbi_product','post_status'=>'any','title'=>$title,'numberposts'=>1,'fields'=>'ids']);
-        if ($exists) continue;
-        wp_insert_post(['post_type'=>'pbi_product','post_status'=>'publish','post_title'=>$title,'post_excerpt'=>$excerpt,'post_content'=>'']);
-    }
+    delete_option('pbi_catalog_version');
+    pbi_sync_managed_catalog();
     flush_rewrite_rules();
 }
 add_action('after_switch_theme', 'pbi_seed_site');
 
-function pbi_get_products(int $limit = 8): WP_Query {
-    return new WP_Query(['post_type'=>'pbi_product','post_status'=>'publish','posts_per_page'=>$limit,'orderby'=>['menu_order'=>'ASC','date'=>'ASC']]);
+function pbi_get_products(int $limit = 9): WP_Query {
+    return new WP_Query([
+        'post_type'=>'pbi_product',
+        'post_status'=>'publish',
+        'posts_per_page'=>$limit,
+        'orderby'=>['menu_order'=>'ASC','date'=>'ASC'],
+    ]);
 }
