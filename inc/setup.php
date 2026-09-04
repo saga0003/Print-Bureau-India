@@ -18,9 +18,14 @@ function pbi_theme_setup(): void {
 }
 add_action('after_setup_theme', 'pbi_theme_setup');
 
+function pbi_asset_version(string $relative, string $fallback): string {
+    $path = trailingslashit(get_template_directory()) . ltrim($relative, '/');
+    return is_file($path) ? (string) filemtime($path) : $fallback;
+}
+
 function pbi_enqueue_assets(): void {
     $version = wp_get_theme()->get('Version');
-    wp_enqueue_style('pbi-style', get_stylesheet_uri(), [], $version);
+    wp_enqueue_style('pbi-style', get_stylesheet_uri(), [], pbi_asset_version('style.css', $version));
 
     $premium_css = get_template_directory() . '/assets/premium-v2.css';
     if (is_file($premium_css)) {
@@ -28,11 +33,27 @@ function pbi_enqueue_assets(): void {
             'pbi-premium-v2',
             get_template_directory_uri() . '/assets/premium-v2.css',
             ['pbi-style'],
-            (string) filemtime($premium_css)
+            pbi_asset_version('assets/premium-v2.css', $version)
         );
     }
 
-    wp_enqueue_script('pbi-theme', get_template_directory_uri() . '/assets/theme.js', [], $version, true);
+    $refinements_css = get_template_directory() . '/assets/refinements.css';
+    if (is_file($refinements_css)) {
+        wp_enqueue_style(
+            'pbi-refinements',
+            get_template_directory_uri() . '/assets/refinements.css',
+            ['pbi-style','pbi-premium-v2'],
+            pbi_asset_version('assets/refinements.css', $version)
+        );
+    }
+
+    wp_enqueue_script(
+        'pbi-theme',
+        get_template_directory_uri() . '/assets/theme.js',
+        [],
+        pbi_asset_version('assets/theme.js', $version),
+        true
+    );
     wp_localize_script('pbi-theme', 'PBI_THEME', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
         'quoteUrl' => home_url('/quote/'),
@@ -48,24 +69,20 @@ function pbi_body_classes(array $classes): array {
 add_filter('body_class', 'pbi_body_classes');
 
 /**
- * Return the official repository SVG for the requested page background.
- * We deliberately prefer the approved GitHub logo assets over old Customizer
- * uploads so an outdated square/bitmap logo cannot override the live header.
- *
- * $surface = dark  -> white-text logo
- * $surface = light -> dark-text logo
+ * Return the official transparent repository logo for the requested surface.
+ * $surface = dark  -> light/white lettering
+ * $surface = light -> dark/navy lettering
  */
 function pbi_logo_url(string $surface = 'dark'): string {
-    $filename = $surface === 'dark'
-        ? 'Print Bureau Transparent White BG.svg'
-        : 'Print Bureau Transparent BG.svg';
+    $filename = $surface === 'dark' ? '2.png' : '1.png';
+    $relative = 'Logo/png/Print Bureau Transparent BG/' . $filename;
+    $path = trailingslashit(get_template_directory()) . $relative;
 
-    $path = trailingslashit(get_template_directory()) . 'Logo/SVG/' . $filename;
     if (is_file($path)) {
-        return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/SVG/' . rawurlencode($filename));
+        return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/png/Print%20Bureau%20Transparent%20BG/' . rawurlencode($filename));
     }
 
-    // Emergency fallback only if the repository SVG is missing.
+    // Emergency fallback only if the transparent repository export is missing.
     $custom = $surface === 'dark'
         ? get_theme_mod('pbi_logo_dark')
         : get_theme_mod('pbi_logo_light');
