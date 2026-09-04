@@ -1,0 +1,78 @@
+/* Print Bureau visual refinements loaded after the base stylesheet. */
+
+/* Header: use the full transparent logo artwork rather than showing the large square canvas. */
+.pbi-brand{
+  position:relative;
+  width:190px;
+  min-width:190px;
+  height:56px;
+  overflow:hidden;
+  gap:0!important;
+}
+.pbi-brand img[data-pbi-logo]{
+  width:180px!important;
+  height:180px!important;
+  max-width:none!important;
+  flex:none;
+  object-fit:contain!important;
+  transform:translate(-11px,-62px);
+  background:transparent!important;
+}
+.pbi-brand__text{display:none!important}
+
+/* Give important conversion typography an explicit heavy weight on every browser. */
+.pbi-title,
+.pbi-page-hero h1,
+.pbi-product-side h1,
+.pbi-heading-row h2,
+.pbi-cta h2{
+  font-weight:900!important;
+  font-synthesis:weight;
+}
+.pbi-btn,
+.pbi-kicker,
+.pbi-category-card__body strong,
+.pbi-process__item strong,
+.pbi-proof strong,
+.pbi-nav a{
+  font-weight:800!important;
+  font-synthesis:weight;
+}
+
+/* Product SEO copy: useful to people and search engines without turning the page into a wall of text. */
+.pbi-product-copy{
+  max-width:920px;
+  padding:34px;
+  border:1px solid var(--pbi-line);
+  border-radius:var(--pbi-radius);
+  background:color-mix(in srgb,var(--pbi-panel) 92%,transparent);
+}
+.pbi-product-copy h2{margin:0 0 14px;font-size:clamp(1.65rem,3vw,2.4rem);font-weight:900!important;letter-spacing:-.035em}
+.pbi-product-copy p{margin:0 0 14px;color:var(--pbi-text-soft);font-size:1.02rem}
+.pbi-product-copy p:last-child{margin-bottom:0}
+
+@media (max-width:760px){
+  /* Android/Chrome can visually soften inherited font weights; force the hierarchy here. */
+  html body .pbi-title{
+    font-weight:900!important;
+    letter-spacing:-.045em!important;
+    line-height:.98!important;
+  }
+  html body .pbi-heading-row h2,
+  html body .pbi-page-hero h1,
+  html body .pbi-product-side h1,
+  html body .pbi-cta h2{
+    font-weight:900!important;
+  }
+  html body .pbi-btn,
+  html body .pbi-kicker,
+  html body .pbi-category-card__body strong,
+  html body .pbi-process__item strong,
+  html body .pbi-proof strong,
+  html body .pbi-nav a{
+    font-weight:800!important;
+  }
+  .pbi-brand{width:145px!important;min-width:145px!important;height:54px!important}
+  .pbi-brand img[data-pbi-logo]{width:162px!important;height:162px!important;transform:translate(-12px,-55px)!important}
+  .pbi-product-copy{padding:24px}
+}
