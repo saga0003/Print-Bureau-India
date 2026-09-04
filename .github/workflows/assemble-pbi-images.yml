@@ -23,7 +23,11 @@ jobs:
           set -euo pipefail
           mkdir -p assets/images
 
-          if [ -f "assets/image-pack/pbi-assets-pack.zip" ]; then
+          if compgen -G "assets/image-pack/v2/part-*.txt" > /dev/null; then
+            cat $(find assets/image-pack/v2 -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
+            base64 --decode /tmp/pbi-assets.b64 > /tmp/pbi-assets-pack.zip
+            unzip -o /tmp/pbi-assets-pack.zip -d assets/images
+          elif [ -f "assets/image-pack/pbi-assets-pack.zip" ]; then
             unzip -o assets/image-pack/pbi-assets-pack.zip -d assets/images
           elif compgen -G "assets/image-pack/chunks/part-*.txt" > /dev/null; then
             cat $(find assets/image-pack/chunks -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
