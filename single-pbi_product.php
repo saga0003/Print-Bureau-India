@@ -3,10 +3,11 @@ $sizes=get_post_meta(get_the_ID(),'_pbi_sizes',true) ?: 'A4, A5, Custom';
 $paper=get_post_meta(get_the_ID(),'_pbi_paper',true) ?: 'Premium Matte, Premium Gloss, Custom';
 $finish=get_post_meta(get_the_ID(),'_pbi_finish',true) ?: 'Matte Lamination, Gloss Lamination, Spot UV';
 $turnaround=get_post_meta(get_the_ID(),'_pbi_turnaround',true) ?: '3–5 business days';
+$pbi_product_image=pbi_product_image_url(get_the_ID(),'pbi-hero');
 ?>
 <section class="pbi-page-hero"><div class="pbi-wrap"><div class="pbi-breadcrumbs"><a href="<?php echo esc_url(home_url('/')); ?>">Home</a><span>›</span><a href="<?php echo esc_url(get_post_type_archive_link('pbi_product')); ?>">Products</a><span>›</span><span><?php the_title(); ?></span></div></div></section>
 <section class="pbi-section--tight"><div class="pbi-wrap pbi-product-layout">
-  <div class="pbi-product-media"><?php if(has_post_thumbnail()): the_post_thumbnail('pbi-hero',['fetchpriority'=>'high']); else: ?><div class="pbi-art"><div class="pbi-art__slab"></div><div class="pbi-art__book"><strong><?php echo esc_html(get_the_title()); ?><br>Printed<br>Beautifully.</strong></div><div class="pbi-art__box"></div><div class="pbi-art__card"></div><div class="pbi-art__sheet"></div></div><?php endif;?></div>
+  <div class="pbi-product-media"><?php if($pbi_product_image): ?><img src="<?php echo esc_url($pbi_product_image); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" fetchpriority="high"><?php else: ?><div class="pbi-art"><div class="pbi-art__slab"></div><div class="pbi-art__book"><strong><?php echo esc_html(get_the_title()); ?><br>Printed<br>Beautifully.</strong></div><div class="pbi-art__box"></div><div class="pbi-art__card"></div><div class="pbi-art__sheet"></div></div><?php endif;?></div>
   <aside class="pbi-product-side">
     <div class="pbi-kicker">Premium print</div><h1><?php the_title(); ?><span class="pbi-dot">.</span></h1><p class="pbi-sub"><?php echo esc_html(get_the_excerpt() ?: 'Thoughtful print, premium materials and a finish that makes the right impression.'); ?></p>
     <div class="pbi-actions"><a class="pbi-btn pbi-btn--primary" href="<?php echo esc_url(home_url('/quote/?product='.rawurlencode(get_the_title()))); ?>">Get a Quote ↗</a><a class="pbi-btn pbi-btn--outline" target="_blank" rel="noopener" href="https://wa.me/<?php echo esc_attr(preg_replace('/\D+/','',pbi_contact('whatsapp','919876543210'))); ?>?text=<?php echo rawurlencode('Hi, I need a quote for '.get_the_title()); ?>">WhatsApp</a></div>
