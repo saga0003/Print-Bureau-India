@@ -36,14 +36,26 @@ function pbi_body_classes(array $classes): array {
 }
 add_filter('body_class', 'pbi_body_classes');
 
-function pbi_logo_url(string $variant = 'dark'): string {
-    $light = get_theme_mod('pbi_logo_light');
-    $dark = get_theme_mod('pbi_logo_dark');
-    if ($variant === 'light' && $light) return esc_url($light);
-    if ($variant === 'dark' && $dark) return esc_url($dark);
-    $fallback = $variant === 'light'
-        ? get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20BG.svg'
-        : get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20White%20BG.svg';
+/**
+ * Return the logo intended for the requested page background.
+ * $surface = dark  -> white-text logo
+ * $surface = light -> dark-text logo
+ */
+function pbi_logo_url(string $surface = 'dark'): string {
+    $for_dark_surface = get_theme_mod('pbi_logo_dark');
+    $for_light_surface = get_theme_mod('pbi_logo_light');
+
+    if ($surface === 'dark' && $for_dark_surface) {
+        return esc_url($for_dark_surface);
+    }
+    if ($surface === 'light' && $for_light_surface) {
+        return esc_url($for_light_surface);
+    }
+
+    $fallback = $surface === 'dark'
+        ? get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20White%20BG.svg'
+        : get_template_directory_uri() . '/Logo/SVG/Print%20Bureau%20Transparent%20BG.svg';
+
     return esc_url($fallback);
 }
 
