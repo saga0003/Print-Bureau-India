@@ -28,19 +28,16 @@ function pbi_enqueue_assets(): void {
     wp_enqueue_style('pbi-style', get_stylesheet_uri(), [], pbi_asset_version('style.css', $version));
 
     $premium_css = get_template_directory() . '/assets/premium-v2.css';
-    if (is_file($premium_css)) {
-        wp_enqueue_style('pbi-premium-v2', get_template_directory_uri() . '/assets/premium-v2.css', ['pbi-style'], pbi_asset_version('assets/premium-v2.css', $version));
-    }
+    if (is_file($premium_css)) wp_enqueue_style('pbi-premium-v2', get_template_directory_uri() . '/assets/premium-v2.css', ['pbi-style'], pbi_asset_version('assets/premium-v2.css', $version));
 
     $refinements_css = get_template_directory() . '/assets/refinements.css';
-    if (is_file($refinements_css)) {
-        wp_enqueue_style('pbi-refinements', get_template_directory_uri() . '/assets/refinements.css', ['pbi-style','pbi-premium-v2'], pbi_asset_version('assets/refinements.css', $version));
-    }
+    if (is_file($refinements_css)) wp_enqueue_style('pbi-refinements', get_template_directory_uri() . '/assets/refinements.css', ['pbi-style','pbi-premium-v2'], pbi_asset_version('assets/refinements.css', $version));
 
     $reference_css = get_template_directory() . '/assets/reference-ui-v3.css';
-    if (is_file($reference_css)) {
-        wp_enqueue_style('pbi-reference-ui-v3', get_template_directory_uri() . '/assets/reference-ui-v3.css', ['pbi-style','pbi-premium-v2','pbi-refinements'], pbi_asset_version('assets/reference-ui-v3.css', $version));
-    }
+    if (is_file($reference_css)) wp_enqueue_style('pbi-reference-ui-v3', get_template_directory_uri() . '/assets/reference-ui-v3.css', ['pbi-style','pbi-premium-v2','pbi-refinements'], pbi_asset_version('assets/reference-ui-v3.css', $version));
+
+    $home_css = get_template_directory() . '/assets/home-v3.css';
+    if (is_file($home_css)) wp_enqueue_style('pbi-home-v3', get_template_directory_uri() . '/assets/home-v3.css', ['pbi-reference-ui-v3'], pbi_asset_version('assets/home-v3.css', $version));
 
     wp_enqueue_script('pbi-theme', get_template_directory_uri() . '/assets/theme.js', [], pbi_asset_version('assets/theme.js', $version), true);
     wp_localize_script('pbi-theme', 'PBI_THEME', [
@@ -57,20 +54,11 @@ function pbi_body_classes(array $classes): array {
 }
 add_filter('body_class', 'pbi_body_classes');
 
-/**
- * Return the official transparent repository logo for the requested surface.
- * $surface = dark  -> light/white lettering
- * $surface = light -> dark/navy lettering
- */
 function pbi_logo_url(string $surface = 'dark'): string {
     $filename = $surface === 'dark' ? '2.png' : '1.png';
     $relative = 'Logo/png/Print Bureau Transparent BG/' . $filename;
     $path = trailingslashit(get_template_directory()) . $relative;
-
-    if (is_file($path)) {
-        return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/png/Print%20Bureau%20Transparent%20BG/' . rawurlencode($filename));
-    }
-
+    if (is_file($path)) return esc_url(trailingslashit(get_template_directory_uri()) . 'Logo/png/Print%20Bureau%20Transparent%20BG/' . rawurlencode($filename));
     $custom = $surface === 'dark' ? get_theme_mod('pbi_logo_dark') : get_theme_mod('pbi_logo_light');
     return $custom ? esc_url($custom) : '';
 }
@@ -97,16 +85,12 @@ function pbi_primary_menu_fallback(): void {
         'Resources' => get_permalink((int) get_option('page_for_posts')) ?: home_url('/blog/'),
     ];
     echo '<div class="pbi-nav">';
-    foreach ($items as $label => $url) {
-        printf('<a href="%s">%s</a>', esc_url($url), esc_html($label));
-    }
+    foreach ($items as $label => $url) printf('<a href="%s">%s</a>', esc_url($url), esc_html($label));
     echo '</div>';
 }
 
 function pbi_menu_link_class(array $atts, WP_Post $item, stdClass $args): array {
-    if (($args->theme_location ?? '') === 'primary') {
-        $atts['class'] = trim(($atts['class'] ?? '') . ' pbi-nav__link');
-    }
+    if (($args->theme_location ?? '') === 'primary') $atts['class'] = trim(($atts['class'] ?? '') . ' pbi-nav__link');
     return $atts;
 }
 add_filter('nav_menu_link_attributes', 'pbi_menu_link_class', 10, 3);
