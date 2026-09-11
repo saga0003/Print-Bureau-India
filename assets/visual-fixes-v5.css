@@ -1,0 +1,82 @@
+/* Print Bureau India — visual fixes v5
+ * Loaded after reference-final-v4.css.
+ * Fixes header logo clipping and relaxes overly-tight headline tracking.
+ */
+
+/* HEADER LOGO — keep the complete mark inside the 74px header */
+.pbi-v4-header .pbi-brand{
+  width:226px!important;
+  min-width:226px!important;
+  height:68px!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+}
+.pbi-v4-header .pbi-brand__logo{
+  width:226px!important;
+  height:68px!important;
+  display:block!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+.pbi-v4-header .pbi-brand__logo img{
+  position:absolute!important;
+  width:238px!important;
+  height:238px!important;
+  max-width:none!important;
+  left:-5px!important;
+  top:-76px!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  mix-blend-mode:normal!important;
+}
+
+/* TYPOGRAPHY — retain the bold premium look without letters feeling cramped */
+.pbi-v4-nav a{letter-spacing:0!important}
+.pbi-v4-home-hero__copy h1{letter-spacing:-.022em!important}
+.pbi-v4-section-head h2,
+.pbi-v4-process h2,
+.pbi-v4-insights h2{letter-spacing:-.025em!important}
+.pbi-v4-product-card__body strong{letter-spacing:-.01em!important}
+.pbi-v4-work-card strong{letter-spacing:-.018em!important}
+.pbi-v4-process__steps strong{letter-spacing:-.01em!important}
+.pbi-r3-product__intro .pbi-r3-heading{letter-spacing:-.025em!important}
+.pbi-cta h2{letter-spacing:-.018em!important}
+
+@media(max-width:760px){
+  .pbi-v4-header .pbi-brand{
+    width:178px!important;
+    min-width:178px!important;
+    height:62px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo{
+    width:178px!important;
+    height:62px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo img{
+    width:200px!important;
+    height:200px!important;
+    left:-8px!important;
+    top:-62px!important;
+  }
+  .pbi-v4-home-hero__copy h1{letter-spacing:-.018em!important}
+  .pbi-r3-product__intro .pbi-r3-heading{letter-spacing:-.02em!important}
+}
+
+@media(max-width:430px){
+  .pbi-v4-header .pbi-brand{
+    width:154px!important;
+    min-width:154px!important;
+    height:60px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo{
+    width:154px!important;
+    height:60px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo img{
+    width:184px!important;
+    height:184px!important;
+    left:-12px!important;
+    top:-57px!important;
+  }
+}
