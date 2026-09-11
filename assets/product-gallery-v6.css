@@ -1,0 +1,236 @@
+/* Print Bureau India — Product gallery + statewide SEO sections v6 */
+
+/* Real product gallery only. No unrelated/fake thumbnails. */
+.pbi-r3-gallery__main{
+  position:relative;
+  overflow:hidden;
+}
+.pbi-gallery-zoom-button{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:zoom-in;
+  overflow:hidden;
+}
+.pbi-gallery-zoom-button img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  transition:transform .22s ease;
+  transform-origin:50% 50%;
+  will-change:transform;
+}
+@media(hover:hover) and (pointer:fine){
+  .pbi-gallery-zoom-button.is-zooming img{transform:scale(1.55)}
+}
+.pbi-gallery-zoom-hint{
+  position:absolute;
+  right:14px;
+  bottom:14px;
+  z-index:3;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(2,16,31,.78);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.02em;
+  pointer-events:none;
+  backdrop-filter:blur(10px);
+}
+.pbi-r3-gallery__nav{
+  z-index:5!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  background:rgba(2,16,31,.78)!important;
+  color:#fff!important;
+  cursor:pointer!important;
+  transition:transform .18s ease,background .18s ease!important;
+}
+.pbi-r3-gallery__nav:hover{transform:translateY(-50%) scale(1.06)!important;background:rgba(2,16,31,.94)!important}
+.pbi-r3-thumb{
+  padding:0!important;
+  border:1px solid rgba(255,255,255,.13)!important;
+  background:#0b2036!important;
+  cursor:pointer!important;
+  overflow:hidden!important;
+  border-radius:10px!important;
+  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease!important;
+}
+.pbi-r3-thumb:hover{transform:translateY(-2px)!important;border-color:rgba(15,207,182,.46)!important}
+.pbi-r3-thumb.is-active,
+.pbi-r3-thumb[aria-current="true"]{
+  border-color:var(--v4-teal)!important;
+  box-shadow:0 0 0 1px var(--v4-teal),0 10px 24px rgba(0,0,0,.14)!important;
+}
+.pbi-r3-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Amazon/Flipkart-style full-screen viewer. */
+.pbi-gallery-lightbox[hidden]{display:none!important}
+.pbi-gallery-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:grid;
+  place-items:center;
+}
+.pbi-gallery-lightbox__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,8,18,.94);
+  backdrop-filter:blur(12px);
+}
+.pbi-gallery-lightbox__dialog{
+  position:relative;
+  z-index:2;
+  width:min(94vw,1280px);
+  height:min(92vh,900px);
+  display:grid;
+  place-items:center;
+  padding:54px 66px 34px;
+}
+.pbi-gallery-lightbox__dialog figure{
+  margin:0;
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:14px;
+}
+.pbi-gallery-lightbox__dialog figure>img{
+  width:100%;
+  height:100%;
+  min-height:0;
+  object-fit:contain;
+  display:block;
+}
+.pbi-gallery-lightbox__dialog figcaption{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#d4dee6;
+  font-size:12px;
+  line-height:1.4;
+}
+.pbi-gallery-lightbox__close,
+.pbi-gallery-lightbox__nav{
+  position:absolute;
+  z-index:3;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(7,25,43,.78);
+  color:#fff;
+  cursor:pointer;
+  backdrop-filter:blur(10px);
+}
+.pbi-gallery-lightbox__close{
+  top:8px;
+  right:8px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  font-size:28px;
+  line-height:1;
+}
+.pbi-gallery-lightbox__nav{
+  top:50%;
+  width:50px;
+  height:64px;
+  border-radius:12px;
+  transform:translateY(-50%);
+  font-size:34px;
+}
+.pbi-gallery-lightbox__nav--prev{left:6px}
+.pbi-gallery-lightbox__nav--next{right:6px}
+html.pbi-lightbox-open,
+html.pbi-lightbox-open body{overflow:hidden!important}
+
+/* SEO/service-area content: useful statewide copy without doorway pages. */
+.pbi-product-seo-copy,
+.pbi-product-statewide{
+  margin-top:54px;
+  padding:34px 38px;
+  border:1px solid var(--v4-border);
+  border-radius:16px;
+  background:linear-gradient(145deg,#071b30,#061729);
+}
+.pbi-product-seo-copy h2,
+.pbi-product-statewide h2{
+  margin:8px 0 16px!important;
+  color:#fff!important;
+  font-size:clamp(28px,3vw,42px)!important;
+  line-height:1.05!important;
+  letter-spacing:-.025em!important;
+  font-weight:900!important;
+}
+.pbi-product-seo-copy p,
+.pbi-product-statewide p{
+  color:#b7c4ce!important;
+  font-size:15px!important;
+  line-height:1.7!important;
+  max-width:980px;
+}
+.pbi-product-statewide__locations{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:20px;
+}
+.pbi-product-statewide__locations span{
+  display:inline-flex;
+  padding:8px 11px;
+  border-radius:999px;
+  border:1px solid rgba(15,207,182,.24);
+  background:rgba(15,207,182,.07);
+  color:#cce8e4;
+  font-size:11px;
+  font-weight:750;
+}
+
+@media(max-width:760px){
+  .pbi-gallery-zoom-hint{right:10px;bottom:10px}
+  .pbi-gallery-lightbox__dialog{
+    width:100vw;
+    height:100vh;
+    padding:58px 18px 22px;
+  }
+  .pbi-gallery-lightbox__nav{
+    top:auto;
+    bottom:58px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    transform:none;
+  }
+  .pbi-gallery-lightbox__nav--prev{left:18px}
+  .pbi-gallery-lightbox__nav--next{right:18px}
+  .pbi-gallery-lightbox__dialog figcaption{
+    padding:0 52px;
+    font-size:11px;
+  }
+  .pbi-product-seo-copy,
+  .pbi-product-statewide{
+    margin-top:34px;
+    padding:26px 22px;
+    border-radius:14px;
+  }
+  .pbi-product-seo-copy h2,
+  .pbi-product-statewide h2{font-size:30px!important}
+}
