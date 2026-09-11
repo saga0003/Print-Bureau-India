@@ -42,6 +42,9 @@ function pbi_enqueue_assets(): void {
     $final_css = get_template_directory() . '/assets/reference-final-v4.css';
     if (is_file($final_css)) wp_enqueue_style('pbi-reference-final-v4', get_template_directory_uri() . '/assets/reference-final-v4.css', ['pbi-home-v3'], pbi_asset_version('assets/reference-final-v4.css', $version));
 
+    $visual_fixes_css = get_template_directory() . '/assets/visual-fixes-v5.css';
+    if (is_file($visual_fixes_css)) wp_enqueue_style('pbi-visual-fixes-v5', get_template_directory_uri() . '/assets/visual-fixes-v5.css', ['pbi-reference-final-v4'], pbi_asset_version('assets/visual-fixes-v5.css', $version));
+
     wp_enqueue_script('pbi-theme', get_template_directory_uri() . '/assets/theme.js', [], pbi_asset_version('assets/theme.js', $version), true);
     wp_localize_script('pbi-theme', 'PBI_THEME', [
         'ajaxUrl' => admin_url('admin-ajax.php'),
