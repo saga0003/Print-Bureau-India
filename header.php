@@ -9,6 +9,77 @@ $blog_url=get_permalink((int)get_option('page_for_posts')) ?: home_url('/blog/')
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <?php wp_head(); ?>
+<style id="pbi-critical-header-fix">
+/* Critical header fit override: deliberately printed after wp_head() so it wins over cached theme CSS. */
+.pbi-v4-header .pbi-brand{
+  width:212px!important;
+  min-width:212px!important;
+  height:74px!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+}
+.pbi-v4-header .pbi-brand__logo{
+  width:212px!important;
+  height:74px!important;
+  display:block!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+.pbi-v4-header .pbi-brand__logo img{
+  position:absolute!important;
+  width:218px!important;
+  height:218px!important;
+  max-width:none!important;
+  left:-2px!important;
+  top:-70px!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  mix-blend-mode:normal!important;
+}
+.pbi-v4-nav a{letter-spacing:.01em!important}
+.pbi-v4-home-hero__copy h1{letter-spacing:0!important}
+.pbi-v4-section-head h2,
+.pbi-v4-process h2,
+.pbi-v4-insights h2{letter-spacing:-.01em!important}
+
+@media(max-width:760px){
+  .pbi-v4-header .pbi-brand{
+    width:168px!important;
+    min-width:168px!important;
+    height:70px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo{
+    width:168px!important;
+    height:70px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo img{
+    width:184px!important;
+    height:184px!important;
+    left:-6px!important;
+    top:-57px!important;
+  }
+  .pbi-v4-home-hero__copy h1{letter-spacing:0!important}
+}
+
+@media(max-width:430px){
+  .pbi-v4-header .pbi-brand{
+    width:148px!important;
+    min-width:148px!important;
+    height:68px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo{
+    width:148px!important;
+    height:68px!important;
+  }
+  .pbi-v4-header .pbi-brand__logo img{
+    width:166px!important;
+    height:166px!important;
+    left:-7px!important;
+    top:-50px!important;
+  }
+}
+</style>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
