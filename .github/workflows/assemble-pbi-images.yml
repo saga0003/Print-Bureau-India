@@ -23,15 +23,23 @@ jobs:
           set -euo pipefail
           mkdir -p assets/images
 
-          if compgen -G "assets/image-pack/v2/part-*.txt" > /dev/null; then
+          # v2 chunk uploads are assembled only after the READY marker is committed.
+          # This prevents partial uploads from being decoded while chunks are still arriving.
+          if [ -f "assets/image-pack/v2/READY" ] && compgen -G "assets/image-pack/v2/part-*.txt" > /dev/null; then
             cat $(find assets/image-pack/v2 -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
             base64 --decode /tmp/pbi-assets.b64 > /tmp/pbi-assets-pack.zip
+            unzip -t /tmp/pbi-assets-pack.zip
             unzip -o /tmp/pbi-assets-pack.zip -d assets/images
+          elif compgen -G "assets/image-pack/v2/part-*.txt" > /dev/null; then
+            echo "Image bundle chunks are still uploading; waiting for READY marker."
+            exit 0
           elif [ -f "assets/image-pack/pbi-assets-pack.zip" ]; then
+            unzip -t assets/image-pack/pbi-assets-pack.zip
             unzip -o assets/image-pack/pbi-assets-pack.zip -d assets/images
           elif compgen -G "assets/image-pack/chunks/part-*.txt" > /dev/null; then
             cat $(find assets/image-pack/chunks -type f -name 'part-*.txt' | sort) > /tmp/pbi-assets.b64
             base64 --decode /tmp/pbi-assets.b64 > /tmp/pbi-assets-pack.zip
+            unzip -t /tmp/pbi-assets-pack.zip
             unzip -o /tmp/pbi-assets-pack.zip -d assets/images
           else
             echo "No image pack found."
