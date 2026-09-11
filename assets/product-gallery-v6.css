@@ -1,236 +1,82 @@
 /* Print Bureau India — Product gallery + statewide SEO sections v6 */
 
 /* Real product gallery only. No unrelated/fake thumbnails. */
-.pbi-r3-gallery__main{
-  position:relative;
-  overflow:hidden;
-}
-.pbi-gallery-zoom-button{
-  position:absolute;
-  inset:0;
-  display:block;
-  width:100%;
-  height:100%;
-  margin:0;
-  padding:0;
-  border:0;
-  background:transparent;
-  cursor:zoom-in;
-  overflow:hidden;
-}
-.pbi-gallery-zoom-button img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  object-position:center;
-  transition:transform .22s ease;
-  transform-origin:50% 50%;
-  will-change:transform;
-}
-@media(hover:hover) and (pointer:fine){
-  .pbi-gallery-zoom-button.is-zooming img{transform:scale(1.55)}
-}
-.pbi-gallery-zoom-hint{
-  position:absolute;
-  right:14px;
-  bottom:14px;
-  z-index:3;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 10px;
-  border-radius:999px;
-  background:rgba(2,16,31,.78);
-  border:1px solid rgba(255,255,255,.18);
-  color:#fff;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.02em;
-  pointer-events:none;
-  backdrop-filter:blur(10px);
-}
-.pbi-r3-gallery__nav{
-  z-index:5!important;
-  border:1px solid rgba(255,255,255,.22)!important;
-  background:rgba(2,16,31,.78)!important;
-  color:#fff!important;
-  cursor:pointer!important;
-  transition:transform .18s ease,background .18s ease!important;
-}
+.pbi-r3-gallery__main{position:relative;overflow:hidden}
+.pbi-gallery-zoom-button{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;cursor:zoom-in;overflow:hidden}
+.pbi-gallery-zoom-button img{width:100%;height:100%;display:block;object-fit:cover;object-position:center;transition:transform .22s ease;transform-origin:50% 50%;will-change:transform}
+@media(hover:hover) and (pointer:fine){.pbi-gallery-zoom-button.is-zooming img{transform:scale(1.55)}}
+.pbi-gallery-zoom-hint{position:absolute;right:14px;bottom:14px;z-index:3;display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:rgba(2,16,31,.78);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:800;letter-spacing:.02em;pointer-events:none;backdrop-filter:blur(10px)}
+.pbi-r3-gallery__nav{z-index:5!important;border:1px solid rgba(255,255,255,.22)!important;background:rgba(2,16,31,.78)!important;color:#fff!important;cursor:pointer!important;transition:transform .18s ease,background .18s ease!important}
 .pbi-r3-gallery__nav:hover{transform:translateY(-50%) scale(1.06)!important;background:rgba(2,16,31,.94)!important}
-.pbi-r3-thumb{
-  padding:0!important;
-  border:1px solid rgba(255,255,255,.13)!important;
-  background:#0b2036!important;
-  cursor:pointer!important;
-  overflow:hidden!important;
-  border-radius:10px!important;
-  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease!important;
-}
+.pbi-r3-thumb{padding:0!important;border:1px solid rgba(255,255,255,.13)!important;background:#0b2036!important;cursor:pointer!important;overflow:hidden!important;border-radius:10px!important;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease!important}
 .pbi-r3-thumb:hover{transform:translateY(-2px)!important;border-color:rgba(15,207,182,.46)!important}
-.pbi-r3-thumb.is-active,
-.pbi-r3-thumb[aria-current="true"]{
-  border-color:var(--v4-teal)!important;
-  box-shadow:0 0 0 1px var(--v4-teal),0 10px 24px rgba(0,0,0,.14)!important;
-}
-.pbi-r3-thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
+.pbi-r3-thumb.is-active,.pbi-r3-thumb[aria-current="true"]{border-color:var(--v4-teal)!important;box-shadow:0 0 0 1px var(--v4-teal),0 10px 24px rgba(0,0,0,.14)!important}
+.pbi-r3-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* Amazon/Flipkart-style full-screen viewer. */
 .pbi-gallery-lightbox[hidden]{display:none!important}
-.pbi-gallery-lightbox{
-  position:fixed;
-  inset:0;
-  z-index:99999;
-  display:grid;
-  place-items:center;
-}
-.pbi-gallery-lightbox__backdrop{
-  position:absolute;
-  inset:0;
-  background:rgba(0,8,18,.94);
-  backdrop-filter:blur(12px);
-}
-.pbi-gallery-lightbox__dialog{
-  position:relative;
-  z-index:2;
-  width:min(94vw,1280px);
-  height:min(92vh,900px);
-  display:grid;
-  place-items:center;
-  padding:54px 66px 34px;
-}
-.pbi-gallery-lightbox__dialog figure{
-  margin:0;
-  width:100%;
-  height:100%;
-  display:grid;
-  grid-template-rows:minmax(0,1fr) auto;
-  gap:14px;
-}
-.pbi-gallery-lightbox__dialog figure>img{
-  width:100%;
-  height:100%;
-  min-height:0;
-  object-fit:contain;
-  display:block;
-}
-.pbi-gallery-lightbox__dialog figcaption{
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  color:#d4dee6;
-  font-size:12px;
-  line-height:1.4;
-}
-.pbi-gallery-lightbox__close,
-.pbi-gallery-lightbox__nav{
-  position:absolute;
-  z-index:3;
-  display:grid;
-  place-items:center;
-  border:1px solid rgba(255,255,255,.22);
-  background:rgba(7,25,43,.78);
-  color:#fff;
-  cursor:pointer;
-  backdrop-filter:blur(10px);
-}
-.pbi-gallery-lightbox__close{
-  top:8px;
-  right:8px;
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  font-size:28px;
-  line-height:1;
-}
-.pbi-gallery-lightbox__nav{
-  top:50%;
-  width:50px;
-  height:64px;
-  border-radius:12px;
-  transform:translateY(-50%);
-  font-size:34px;
-}
-.pbi-gallery-lightbox__nav--prev{left:6px}
-.pbi-gallery-lightbox__nav--next{right:6px}
-html.pbi-lightbox-open,
-html.pbi-lightbox-open body{overflow:hidden!important}
+.pbi-gallery-lightbox{position:fixed;inset:0;z-index:99999;display:grid;place-items:center}
+.pbi-gallery-lightbox__backdrop{position:absolute;inset:0;background:rgba(0,8,18,.94);backdrop-filter:blur(12px)}
+.pbi-gallery-lightbox__dialog{position:relative;z-index:2;width:min(94vw,1280px);height:min(92vh,900px);display:grid;place-items:center;padding:54px 66px 34px}
+.pbi-gallery-lightbox__dialog figure{margin:0;width:100%;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:14px}
+.pbi-gallery-lightbox__dialog figure>img{width:100%;height:100%;min-height:0;object-fit:contain;display:block}
+.pbi-gallery-lightbox__dialog figcaption{display:flex;justify-content:space-between;gap:20px;color:#d4dee6;font-size:12px;line-height:1.4}
+.pbi-gallery-lightbox__close,.pbi-gallery-lightbox__nav{position:absolute;z-index:3;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(7,25,43,.78);color:#fff;cursor:pointer;backdrop-filter:blur(10px)}
+.pbi-gallery-lightbox__close{top:8px;right:8px;width:44px;height:44px;border-radius:50%;font-size:28px;line-height:1}
+.pbi-gallery-lightbox__nav{top:50%;width:50px;height:64px;border-radius:12px;transform:translateY(-50%);font-size:34px}
+.pbi-gallery-lightbox__nav--prev{left:6px}.pbi-gallery-lightbox__nav--next{right:6px}
+html.pbi-lightbox-open,html.pbi-lightbox-open body{overflow:hidden!important}
 
-/* SEO/service-area content: useful statewide copy without doorway pages. */
-.pbi-product-seo-copy,
-.pbi-product-statewide{
-  margin-top:54px;
-  padding:34px 38px;
-  border:1px solid var(--v4-border);
-  border-radius:16px;
-  background:linear-gradient(145deg,#071b30,#061729);
-}
-.pbi-product-seo-copy h2,
-.pbi-product-statewide h2{
-  margin:8px 0 16px!important;
-  color:#fff!important;
-  font-size:clamp(28px,3vw,42px)!important;
-  line-height:1.05!important;
-  letter-spacing:-.025em!important;
-  font-weight:900!important;
-}
-.pbi-product-seo-copy p,
-.pbi-product-statewide p{
-  color:#b7c4ce!important;
-  font-size:15px!important;
-  line-height:1.7!important;
-  max-width:980px;
-}
-.pbi-product-statewide__locations{
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-  margin-top:20px;
-}
-.pbi-product-statewide__locations span{
-  display:inline-flex;
-  padding:8px 11px;
-  border-radius:999px;
-  border:1px solid rgba(15,207,182,.24);
-  background:rgba(15,207,182,.07);
-  color:#cce8e4;
-  font-size:11px;
-  font-weight:750;
+/* Quote-side WhatsApp action. */
+.pbi-product-whatsapp{display:flex;align-items:center;justify-content:center;min-height:44px;margin-top:10px;border:1px solid rgba(15,207,182,.48);border-radius:8px;color:#8fe4d8!important;font-size:12px;font-weight:800;transition:.2s ease}
+.pbi-product-whatsapp:hover{background:rgba(15,207,182,.08)}
+
+/* Service benefits directly under hero. No invented ratings or client counts. */
+.pbi-product-benefits{display:grid;grid-template-columns:repeat(4,1fr);margin:34px 0 0;border:1px solid var(--v4-border);border-radius:14px;background:#071a2e;overflow:hidden}
+.pbi-product-benefits>div{min-height:88px;padding:18px 20px;display:flex;align-items:center;gap:13px;border-right:1px solid var(--v4-border)}
+.pbi-product-benefits>div:last-child{border-right:0}
+.pbi-product-benefits b{width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:grid;place-items:center;background:rgba(15,207,182,.08);border:1px solid rgba(15,207,182,.28);color:var(--v4-teal);font-size:15px}
+.pbi-product-benefits span{display:grid;gap:3px}.pbi-product-benefits strong{color:#fff;font-size:13px;font-weight:850}.pbi-product-benefits small{color:#8fa4b3;font-size:11px;line-height:1.35}
+
+/* Mockup-inspired information navigation. */
+.pbi-product-tabs{display:flex;align-items:center;gap:2px;margin-top:42px;border-bottom:1px solid var(--v4-border);overflow-x:auto;scrollbar-width:none}
+.pbi-product-tabs::-webkit-scrollbar{display:none}.pbi-product-tabs a{flex:0 0 auto;padding:14px 18px;color:#9fb1bd!important;font-size:12px;font-weight:750;border-bottom:2px solid transparent}.pbi-product-tabs a:first-child,.pbi-product-tabs a:hover{color:#fff!important;border-bottom-color:var(--v4-teal)}
+
+/* Useful SEO content + popular-use panel. */
+.pbi-product-detail{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.65fr);gap:24px;margin-top:0;padding:38px;border:1px solid var(--v4-border);border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(145deg,#071b30,#061729)}
+.pbi-product-detail__copy h2{margin:8px 0 16px!important;color:#fff!important;font-size:clamp(30px,3.5vw,46px)!important;line-height:1.02!important;letter-spacing:-.03em!important;font-weight:900!important}
+.pbi-product-detail__copy p{color:#b7c4ce!important;font-size:15px!important;line-height:1.72!important;max-width:850px}.pbi-product-detail__copy h3{color:#fff!important;font-size:20px!important;margin:24px 0 8px!important}.pbi-product-detail__copy .pbi-btn{margin-top:10px}
+.pbi-product-popular{align-self:start;padding:24px;border:1px solid rgba(15,207,182,.16);border-radius:13px;background:rgba(15,207,182,.055)}
+.pbi-product-popular h3{margin:0 0 14px;color:#fff;font-size:17px}.pbi-product-popular ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}.pbi-product-popular li{position:relative;padding-left:20px;color:#bfd0da;font-size:12px;line-height:1.4}.pbi-product-popular li::before{content:"✓";position:absolute;left:0;color:var(--v4-teal);font-weight:900}
+
+/* Specification strip. */
+.pbi-product-specs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:18px;border:1px solid var(--v4-border);border-radius:14px;overflow:hidden;background:#071a2e}
+.pbi-product-specs>div{padding:20px;border-right:1px solid var(--v4-border)}.pbi-product-specs>div:last-child{border-right:0}.pbi-product-specs small{display:block;margin-bottom:8px;color:#7f99aa;font-size:10px;text-transform:uppercase;letter-spacing:.09em;font-weight:800}.pbi-product-specs strong{display:block;color:#edf6fa;font-size:12px;line-height:1.55;font-weight:700}
+
+/* Statewide SEO/service-area content: useful copy, not doorway pages. */
+.pbi-product-seo-copy,.pbi-product-statewide{margin-top:54px;padding:34px 38px;border:1px solid var(--v4-border);border-radius:16px;background:linear-gradient(145deg,#071b30,#061729)}
+.pbi-product-seo-copy h2,.pbi-product-statewide h2{margin:8px 0 16px!important;color:#fff!important;font-size:clamp(28px,3vw,42px)!important;line-height:1.05!important;letter-spacing:-.025em!important;font-weight:900!important}
+.pbi-product-seo-copy p,.pbi-product-statewide p{color:#b7c4ce!important;font-size:15px!important;line-height:1.7!important;max-width:980px}
+.pbi-product-statewide__locations{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.pbi-product-statewide__locations span{display:inline-flex;padding:8px 11px;border-radius:999px;border:1px solid rgba(15,207,182,.24);background:rgba(15,207,182,.07);color:#cce8e4;font-size:11px;font-weight:750}
+
+/* Dynamic related products. */
+.pbi-product-related{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.pbi-product-related>a{min-width:0;display:block;padding:9px;border:1px solid var(--v4-border);border-radius:12px;background:#081c31;transition:.2s ease}.pbi-product-related>a:hover{transform:translateY(-3px);border-color:rgba(15,207,182,.38)}.pbi-product-related>a>div{height:128px;border-radius:8px;overflow:hidden;background:#10283e}.pbi-product-related img{width:100%;height:100%;display:block;object-fit:cover}.pbi-product-related strong{display:block;padding:11px 5px 5px;color:#fff;font-size:12px;font-weight:800;line-height:1.25}
+
+@media(max-width:980px){
+ .pbi-product-benefits{grid-template-columns:repeat(2,1fr)}.pbi-product-benefits>div:nth-child(2){border-right:0}.pbi-product-benefits>div:nth-child(-n+2){border-bottom:1px solid var(--v4-border)}
+ .pbi-product-specs{grid-template-columns:repeat(2,1fr)}.pbi-product-specs>div:nth-child(2){border-right:0}.pbi-product-specs>div:nth-child(-n+2){border-bottom:1px solid var(--v4-border)}
+ .pbi-product-related{grid-template-columns:repeat(3,1fr)}
 }
 
 @media(max-width:760px){
   .pbi-gallery-zoom-hint{right:10px;bottom:10px}
-  .pbi-gallery-lightbox__dialog{
-    width:100vw;
-    height:100vh;
-    padding:58px 18px 22px;
-  }
-  .pbi-gallery-lightbox__nav{
-    top:auto;
-    bottom:58px;
-    width:46px;
-    height:46px;
-    border-radius:50%;
-    transform:none;
-  }
-  .pbi-gallery-lightbox__nav--prev{left:18px}
-  .pbi-gallery-lightbox__nav--next{right:18px}
-  .pbi-gallery-lightbox__dialog figcaption{
-    padding:0 52px;
-    font-size:11px;
-  }
-  .pbi-product-seo-copy,
-  .pbi-product-statewide{
-    margin-top:34px;
-    padding:26px 22px;
-    border-radius:14px;
-  }
-  .pbi-product-seo-copy h2,
-  .pbi-product-statewide h2{font-size:30px!important}
+  .pbi-gallery-lightbox__dialog{width:100vw;height:100vh;padding:58px 18px 22px}
+  .pbi-gallery-lightbox__nav{top:auto;bottom:58px;width:46px;height:46px;border-radius:50%;transform:none}.pbi-gallery-lightbox__nav--prev{left:18px}.pbi-gallery-lightbox__nav--next{right:18px}
+  .pbi-gallery-lightbox__dialog figcaption{padding:0 52px;font-size:11px}
+  .pbi-product-benefits{margin-top:22px}.pbi-product-benefits>div{min-height:78px;padding:14px 12px}.pbi-product-benefits b{width:34px;height:34px;flex-basis:34px}.pbi-product-benefits small{display:none}
+  .pbi-product-tabs{margin-top:30px}.pbi-product-tabs a{padding:13px 15px}
+  .pbi-product-detail{grid-template-columns:1fr;padding:24px 20px;gap:20px}.pbi-product-detail__copy h2{font-size:31px!important}.pbi-product-popular{padding:20px}
+  .pbi-product-specs{grid-template-columns:1fr}.pbi-product-specs>div{border-right:0!important;border-bottom:1px solid var(--v4-border)!important}.pbi-product-specs>div:last-child{border-bottom:0!important}
+  .pbi-product-seo-copy,.pbi-product-statewide{margin-top:34px;padding:26px 22px;border-radius:14px}.pbi-product-seo-copy h2,.pbi-product-statewide h2{font-size:30px!important}
+  .pbi-product-related{display:grid;grid-auto-flow:column;grid-auto-columns:44vw;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px}.pbi-product-related::-webkit-scrollbar{display:none}.pbi-product-related>a{scroll-snap-align:start}.pbi-product-related>a>div{height:135px}
 }
