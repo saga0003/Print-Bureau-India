@@ -2,10 +2,9 @@
 /**
  * GitHub-first theme asset helpers.
  *
- * The theme can use branded images committed under assets/images/ directly.
- * If a GitHub image is not present, WordPress Media Library / Featured Images
- * remain the fallback. This lets ChatGPT/GitHub drive most visual updates while
- * still preserving an easy WordPress override path.
+ * Product cards now use the first image from assets/images/products/{slug}/
+ * when a gallery bundle exists. Staff-managed gallery overrides still win via
+ * the WordPress Featured Image set by the front-end Content Manager.
  */
 if (!defined('ABSPATH')) { exit; }
 
@@ -43,21 +42,44 @@ function pbi_product_asset_filename(int $post_id): string {
     return $map[$slug] ?? ($slug ? sanitize_file_name($slug) . '.webp' : '');
 }
 
+function pbi_first_product_bundle_image_url(int $post_id): string {
+    $slug = sanitize_file_name((string) get_post_field('post_name', $post_id));
+    if ($slug === '') return '';
+
+    $dir = trailingslashit(get_template_directory()) . 'assets/images/products/' . $slug;
+    if (!is_dir($dir)) return '';
+
+    $files = [];
+    foreach (['webp','avif','jpg','jpeg','png'] as $ext) {
+        $found = glob(trailingslashit($dir) . '*.' . $ext);
+        if ($found) $files = array_merge($files, $found);
+    }
+    if (!$files) return '';
+
+    natsort($files);
+    $first = basename((string) reset($files));
+    return trailingslashit(get_template_directory_uri()) . 'assets/images/products/' . rawurlencode($slug) . '/' . rawurlencode($first);
+}
+
 function pbi_product_image_url(int $post_id, string $size = 'pbi-card'): string {
     $asset = pbi_product_asset_filename($post_id);
-
-    if (pbi_prefer_github_assets() && $asset && pbi_theme_image_exists($asset)) {
-        return pbi_theme_image_url($asset);
-    }
-
     $featured = get_the_post_thumbnail_url($post_id, $size);
-    if ($featured) {
-        return (string) $featured;
+    $gallery_override = get_post_meta($post_id, '_pbi_gallery_override', true) === '1';
+
+    /* Staff-managed product images are the explicit override. */
+    if ($gallery_override && $featured) return (string) $featured;
+
+    if (pbi_prefer_github_assets()) {
+        $bundle = pbi_first_product_bundle_image_url($post_id);
+        if ($bundle) return $bundle;
+        if ($asset && pbi_theme_image_exists($asset)) return pbi_theme_image_url($asset);
     }
 
-    if (!$featured && $asset && pbi_theme_image_exists($asset)) {
-        return pbi_theme_image_url($asset);
-    }
+    if ($featured) return (string) $featured;
+
+    $bundle = pbi_first_product_bundle_image_url($post_id);
+    if ($bundle) return $bundle;
+    if ($asset && pbi_theme_image_exists($asset)) return pbi_theme_image_url($asset);
 
     return '';
 }
@@ -68,20 +90,15 @@ function pbi_hero_image_url(): string {
     }
 
     $custom = (string) get_theme_mod('pbi_hero_image', '');
-    if ($custom) {
-        return $custom;
-    }
+    if ($custom) return $custom;
 
-    if (pbi_theme_image_exists('hero.webp')) {
-        return pbi_theme_image_url('hero.webp');
-    }
-
+    if (pbi_theme_image_exists('hero.webp')) return pbi_theme_image_url('hero.webp');
     return '';
 }
 
 function pbi_print_product_image(int $post_id, string $size = 'pbi-card', array $attrs = []): void {
     $url = pbi_product_image_url($post_id, $size);
-    if (!$url) { return; }
+    if (!$url) return;
 
     $defaults = [
         'alt'     => get_the_title($post_id),
@@ -91,7 +108,7 @@ function pbi_print_product_image(int $post_id, string $size = 'pbi-card', array 
 
     $html_attrs = '';
     foreach ($attrs as $key => $value) {
-        if ($value === null || $value === false) { continue; }
+        if ($value === null || $value === false) continue;
         $html_attrs .= ' ' . esc_attr($key) . '="' . esc_attr((string) $value) . '"';
     }
 
