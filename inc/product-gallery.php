@@ -4,12 +4,14 @@ if (!defined('ABSPATH')) { exit; }
 /**
  * Product gallery management.
  *
- * Gallery image sources, in order:
+ * Default gallery sources:
  * 1. Product-specific GitHub image bundle under assets/images/products/{slug}/
- * 2. Images selected in the WordPress Product Gallery meta box
- * 3. Product featured/GitHub primary image as a single-image fallback
+ * 2. WordPress Media Library gallery
+ * 3. Product featured/GitHub primary image as fallback
  *
- * We never show unrelated theme images as fake thumbnails.
+ * When _pbi_gallery_override=1, the staff-managed WordPress gallery replaces
+ * the GitHub bundle completely. This is what makes front-end image editing
+ * genuinely useful instead of mixing old/default images with new ones.
  */
 
 function pbi_product_gallery_meta_box(): void {
@@ -33,8 +35,10 @@ function pbi_product_gallery_ids(int $post_id): array {
 function pbi_product_gallery_meta_box_html(WP_Post $post): void {
     wp_nonce_field('pbi_save_product_gallery', 'pbi_product_gallery_nonce');
     $ids = pbi_product_gallery_ids($post->ID);
+    $override = get_post_meta($post->ID, '_pbi_gallery_override', true) === '1';
 
-    echo '<p>Select genuine photos/mockups for this product. These images power the thumbnails, next/previous controls, zoom and full-screen viewer on the product page.</p>';
+    echo '<p>Select genuine photos/mockups for this product. These images power thumbnails, next/previous controls, zoom and the full-screen viewer.</p>';
+    if ($override) echo '<p><strong>Staff gallery override is active:</strong> these WordPress images replace the GitHub/default image bundle.</p>';
     echo '<input type="hidden" id="pbi_gallery_ids" name="pbi_gallery_ids" value="' . esc_attr(implode(',', $ids)) . '">';
     echo '<div id="pbi-gallery-preview" style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0">';
 
@@ -50,7 +54,7 @@ function pbi_product_gallery_meta_box_html(WP_Post $post): void {
     echo '</div>';
     echo '<p><button type="button" class="button button-primary" id="pbi-add-gallery-images">Add / reorder gallery images</button> ';
     echo '<button type="button" class="button" id="pbi-clear-gallery-images">Clear gallery</button></p>';
-    echo '<p class="description">Tip: upload 4–6 distinct views per product. The first selected image becomes the first gallery image. You can also commit a GitHub image bundle to <code>assets/images/products/' . esc_html((string) get_post_field('post_name', $post->ID)) . '/</code> using names such as <code>01.webp</code>, <code>02.webp</code>, etc.</p>';
+    echo '<p class="description">Tip: upload 4–6 distinct views per product. The first selected image becomes the main image. Front-end staff can manage the same gallery at <code>/content-manager/</code>.</p>';
 }
 
 function pbi_save_product_gallery(int $post_id): void {
@@ -61,6 +65,12 @@ function pbi_save_product_gallery(int $post_id): void {
     $raw = isset($_POST['pbi_gallery_ids']) ? sanitize_text_field(wp_unslash($_POST['pbi_gallery_ids'])) : '';
     $ids = array_values(array_filter(array_map('absint', preg_split('/\s*,\s*/', $raw))));
     update_post_meta($post_id, '_pbi_gallery_ids', implode(',', $ids));
+    if ($ids) {
+        update_post_meta($post_id, '_pbi_gallery_override', '1');
+        set_post_thumbnail($post_id, $ids[0]);
+    } else {
+        delete_post_meta($post_id, '_pbi_gallery_override');
+    }
 }
 add_action('save_post_pbi_product', 'pbi_save_product_gallery');
 
@@ -80,10 +90,7 @@ jQuery(function($){
   const ids = () => $preview.find('.pbi-admin-gallery-item').map(function(){ return $(this).data('id'); }).get();
   const sync = () => $field.val(ids().join(','));
 
-  $preview.sortable({
-    items: '.pbi-admin-gallery-item',
-    update: sync
-  });
+  $preview.sortable({ items: '.pbi-admin-gallery-item', update: sync });
 
   $('#pbi-add-gallery-images').on('click', function(e){
     e.preventDefault();
@@ -109,7 +116,6 @@ jQuery(function($){
       });
       sync();
     });
-
     frame.open();
   });
 
@@ -178,19 +184,36 @@ function pbi_product_media_gallery_images(int $post_id): array {
 }
 
 function pbi_product_gallery_images(int $post_id): array {
-    $images = array_merge(
-        pbi_product_github_gallery_images($post_id),
-        pbi_product_media_gallery_images($post_id)
-    );
+    $override = get_post_meta($post_id, '_pbi_gallery_override', true) === '1';
 
-    $primary = pbi_product_image_url($post_id, 'full');
-    if ($primary) {
-        array_unshift($images, [
-            'url' => $primary,
-            'thumb' => $primary,
-            'alt' => get_the_title($post_id) . ' printing | Print Bureau India',
-            'source' => 'primary',
-        ]);
+    if ($override) {
+        $images = pbi_product_media_gallery_images($post_id);
+        if (!$images) {
+            $featured = get_the_post_thumbnail_url($post_id, 'full');
+            if ($featured) {
+                $images[] = [
+                    'url' => $featured,
+                    'thumb' => $featured,
+                    'alt' => get_the_title($post_id) . ' printing | Print Bureau India',
+                    'source' => 'featured',
+                ];
+            }
+        }
+    } else {
+        $images = array_merge(
+            pbi_product_github_gallery_images($post_id),
+            pbi_product_media_gallery_images($post_id)
+        );
+
+        $primary = pbi_product_image_url($post_id, 'full');
+        if ($primary) {
+            array_unshift($images, [
+                'url' => $primary,
+                'thumb' => $primary,
+                'alt' => get_the_title($post_id) . ' printing | Print Bureau India',
+                'source' => 'primary',
+            ]);
+        }
     }
 
     $seen = [];
