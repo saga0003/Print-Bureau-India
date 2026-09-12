@@ -7,6 +7,10 @@ if (!defined('ABSPATH')) { exit; }
  * This deliberately updates only approved website content/settings from
  * content/managed-content.json. It never deletes posts, media, leads, users,
  * orders, form submissions or other database records.
+ *
+ * Product fields edited through the front-end Content Manager are protected
+ * by _pbi_content_override so future GitHub theme syncs do not erase staff
+ * changes. Editors can explicitly reset a product to GitHub defaults.
  */
 
 function pbi_managed_content_file(): string {
@@ -74,26 +78,38 @@ function pbi_sync_managed_product(array $product): void {
         if ($ids) $existing = get_post((int) $ids[0]);
     }
 
+    $has_staff_override = $existing instanceof WP_Post
+        && get_post_meta($existing->ID, '_pbi_content_override', true) === '1';
+
     $postarr = [
-        'post_type'    => 'pbi_product',
-        'post_status'  => 'publish',
-        'post_name'    => $slug,
-        'post_title'   => sanitize_text_field($product['title'] ?? ucwords(str_replace('-', ' ', $slug))),
-        'post_excerpt' => sanitize_textarea_field($product['excerpt'] ?? ''),
-        'post_content' => wp_kses_post($product['content'] ?? ''),
-        'menu_order'   => (int) ($product['menu_order'] ?? 0),
+        'post_type'   => 'pbi_product',
+        'post_status' => 'publish',
+        'post_name'   => $slug,
+        'menu_order'  => (int) ($product['menu_order'] ?? 0),
     ];
+
+    if (!$has_staff_override) {
+        $postarr['post_title'] = sanitize_text_field($product['title'] ?? ucwords(str_replace('-', ' ', $slug)));
+        $postarr['post_excerpt'] = sanitize_textarea_field($product['excerpt'] ?? '');
+        $postarr['post_content'] = wp_kses_post($product['content'] ?? '');
+    }
 
     if ($existing instanceof WP_Post) {
         $postarr['ID'] = $existing->ID;
         $post_id = wp_update_post(wp_slash($postarr), true);
     } else {
+        /* Missing products have no override, so include the managed fields. */
+        $postarr['post_title'] = sanitize_text_field($product['title'] ?? ucwords(str_replace('-', ' ', $slug)));
+        $postarr['post_excerpt'] = sanitize_textarea_field($product['excerpt'] ?? '');
+        $postarr['post_content'] = wp_kses_post($product['content'] ?? '');
         $post_id = wp_insert_post(wp_slash($postarr), true);
     }
 
     if (is_wp_error($post_id) || !$post_id) return;
 
     update_post_meta($post_id, '_pbi_managed_content', '1');
+
+    if ($has_staff_override) return;
 
     $meta_map = [
         'sizes'       => '_pbi_sizes',
