@@ -22,6 +22,7 @@ require_once get_template_directory() . '/inc/content.php';
 require_once get_template_directory() . '/inc/product-gallery.php';
 require_once get_template_directory() . '/inc/content-sync.php';
 require_once get_template_directory() . '/inc/frontend-content-manager.php';
+require_once get_template_directory() . '/inc/content-manager-user-setup.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/leads.php';
 require_once get_template_directory() . '/inc/seo.php';
