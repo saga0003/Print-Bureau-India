@@ -20,6 +20,7 @@ require_once get_template_directory() . '/inc/setup.php';
 require_once get_template_directory() . '/inc/theme-assets.php';
 require_once get_template_directory() . '/inc/content.php';
 require_once get_template_directory() . '/inc/product-gallery.php';
+require_once get_template_directory() . '/inc/product-ui.php';
 require_once get_template_directory() . '/inc/content-sync.php';
 require_once get_template_directory() . '/inc/frontend-content-manager.php';
 require_once get_template_directory() . '/inc/content-manager-user-setup.php';
