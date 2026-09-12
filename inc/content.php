@@ -11,6 +11,8 @@ function pbi_register_content_types(): void {
         'supports' => ['title','editor','excerpt','thumbnail','page-attributes'],
         'show_in_rest' => true,
         'menu_position' => 21,
+        'capability_type' => ['pbi_product', 'pbi_products'],
+        'map_meta_cap' => true,
     ]);
     register_taxonomy('pbi_product_category', ['pbi_product'], [
         'labels' => ['name' => 'Product Categories', 'singular_name' => 'Product Category'],
@@ -68,23 +70,27 @@ function pbi_managed_products(): array {
     return [
         'Business Cards' => 'Premium cards designed to make the first impression count.',
         'Brochures' => 'Brochures that inform, impress and move customers to act.',
+        'Flyers & Pamphlets' => 'Flyers, pamphlets and leaflets for offers, events and campaigns.',
         'Packaging' => 'Premium packaging for products, gifts and retail brands.',
         'Stationery' => 'Letterheads, envelopes and coordinated business stationery.',
+        'Custom Notebooks & Diaries' => 'Branded notebooks, diaries, planners and institutional stationery.',
         'Books & Catalogs' => 'Books, catalogs, reports and premium bound documents.',
-        'Invitations' => 'Premium invitations for weddings, events, launches and celebrations.',
         'Stickers & Labels' => 'Custom labels and stickers for products, events and campaigns.',
         'Banners & Signage' => 'High-impact large-format print and signage.',
-        'Institutional Printing' => 'Certificates, notebooks, ID materials and institutional print.',
+        'Institutional Printing' => 'School, college and recurring institutional print requirements.',
+        'Certificates' => 'Academic, event, training and premium certificate printing.',
+        'Invitations' => 'Premium invitations for weddings, events, launches and celebrations.',
+        'Calendars' => 'Custom desk, wall and promotional calendar printing.',
     ];
 }
 
 /**
- * Keep the small core product catalogue present after GitHub theme updates.
- * This is intentionally conservative: it creates missing products and controls
- * menu order, but it does not overwrite user-edited product copy.
+ * Keep the core product catalogue present after GitHub theme updates.
+ * This creates missing products and controls menu order, but does not overwrite
+ * copy once the richer managed-content manifest/front-end editor owns it.
  */
 function pbi_sync_managed_catalog(): void {
-    $catalog_version = '2026-09-04-v2';
+    $catalog_version = '2026-09-12-v3';
     if (get_option('pbi_catalog_version') === $catalog_version) return;
 
     pbi_register_content_types();
@@ -143,7 +149,7 @@ function pbi_seed_site(): void {
 }
 add_action('after_switch_theme', 'pbi_seed_site');
 
-function pbi_get_products(int $limit = 9): WP_Query {
+function pbi_get_products(int $limit = 13): WP_Query {
     return new WP_Query([
         'post_type'=>'pbi_product',
         'post_status'=>'publish',
